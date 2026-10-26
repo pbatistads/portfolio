@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "hash:password": "node scripts/hash-password.mjs",
+    "setup:demo": "node scripts/setup-demo.mjs",
+    "test": "node --test tests/security.test.mjs",
+    "test:integration": "node --test tests/cases.integration.test.mjs"
   },
   "dependencies": {
     "next": "16.4.2",

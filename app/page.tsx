@@ -1,4 +1,6 @@
 import Image from "next/image";
+import Link from "next/link";
+import { projects } from "@/projects/catalog";
 
 export default function Home() {
   return (
@@ -63,6 +65,19 @@ export default function Home() {
             Documentation
           </a>
         </div>
+        <section className="mt-16 w-full space-y-6" aria-labelledby="projects-title">
+          <h2 id="projects-title" className="text-2xl font-semibold">Cases demonstrativos</h2>
+          <ul className="space-y-6">
+            {projects.map((project) => (
+              <li key={project.slug} className="rounded-lg border border-zinc-300 p-5 dark:border-zinc-700">
+                <Image src={project.thumbnail.src} alt={project.thumbnail.alt} width={48} height={48} className="mb-3 dark:invert" />
+                <h3 className="text-xl font-medium"><Link href={`/cases/${project.slug}`} prefetch={false} className="underline">{project.title}</Link></h3>
+                <p className="mt-2">{project.summary}</p>
+                <p className="mt-2 text-sm">{project.categories.join(" · ")} · {project.access === "protected" ? "Protegido por senha" : "Público"}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
       </main>
     </div>
   );

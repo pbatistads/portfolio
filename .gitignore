@@ -43,3 +43,7 @@ next-env.d.ts
 # Reserved private case sources and media (not served or loaded yet)
 /private/cases/*
 !/private/cases/README.md
+# Fictional fixtures only; real private cases remain ignored.
+!/private/cases/demo-aurora/
+!/private/cases/demo-orbita/
+!.env.example

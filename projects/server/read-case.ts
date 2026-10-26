@@ -9,7 +9,7 @@ export async function readCase(slug: string) {
 
   if (!project) return null;
   // Check access before consulting any content registry.
-  if (project.access === "protected") return readProtectedCase();
+  if (project.access === "protected") return readProtectedCase(slug);
 
   const load = publicCaseLoaders.get(project.slug);
   if (!load) return null;

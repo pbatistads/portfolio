@@ -7,4 +7,4 @@ import type { ComponentType } from "react";
 export const publicCaseLoaders = new Map<
   string,
   () => Promise<{ default: ComponentType }>
->();
+>([["demo-publico", () => import("./demo-publico")]]);

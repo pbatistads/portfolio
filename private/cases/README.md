@@ -1,14 +1,13 @@
-# Conteúdo reservado
+﻿# Conteúdo de cases protegidos
 
-Pasta reservada para futuros conteúdos completos e imagens de cases protegidos.
-Os arquivos desta pasta (exceto este guia) são ignorados pelo Git e não são lidos
-pela aplicação nesta etapa. Não adicione arquivos privados a `public`, nem os
-importe em componentes, no catálogo público ou no registro de cases públicos.
+Os diretórios demo-aurora e demo-orbita contêm apenas material fictício, com
+exceções explícitas no .gitignore para possibilitar testes reproduzíveis.
+Outros cases permanecem ignorados: provisione-os no build de servidor e configure
+outputFileTracingIncludes sem copiar arquivos para public ou assets estáticos.
 
-A leitura futura deverá passar por `projects/server/protected-cases.ts`, com
-autorização específica para o slug antes de ler qualquer arquivo. Imagens
-privadas também precisarão de entrega autorizada; não usar URLs públicas nem
-imports estáticos, que podem produzir arquivos em `/_next/static`.
+Somente projects/server/protected-cases.tsx lê estes arquivos, após validar a
+sessão do slug. Imagens e downloads são entregues pela rota privada autorizada;
+não use imports estáticos nem next/image com cache compartilhado para eles.
 
-Ignorar no Git não é controle de acesso nem estratégia de armazenamento em
-produção. O provisionamento desses arquivos será definido com a autenticação.
+Consulte o README da raiz para cadastro, hashes, variáveis, limites de tentativas
+e requisitos de deploy. Não coloque senhas ou hashes nestes diretórios.

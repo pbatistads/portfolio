@@ -1,0 +1,9 @@
+{
+  "sections": [
+    { "title": "Exploração reservada Órbita", "text": "ORBITA_INTERNO_9C82: experimento inteiramente fictício de organização de viagens espaciais imaginárias. A proposta organiza destinos por etapas de preparação." },
+    { "title": "Solução demonstrativa", "text": "Uma linha de planejamento conecta três destinos fictícios. Todas as observações e decisões foram criadas exclusivamente para este exemplo." }
+  ],
+  "image": "mapa.svg",
+  "imageAlt": "Mapa fictício Órbita com três destinos conectados sobre fundo azul",
+  "download": "notas.txt"
+}

@@ -1,0 +1,9 @@
+{
+  "sections": [
+    { "title": "Descoberta reservada Aurora", "text": "AURORA_INTERNO_7F31: estudo inteiramente fictício de um painel de bem-estar. A equipe simulada priorizou pausas e uma leitura tranquila das atividades." },
+    { "title": "Solução demonstrativa", "text": "Cartões de rotina agrupam descanso, movimento e foco. Estes resultados são inventados e não representam clientes ou participantes reais." }
+  ],
+  "image": "painel.svg",
+  "imageAlt": "Painel fictício Aurora com cartões de rotina em tons verdes",
+  "download": "notas.txt"
+}
