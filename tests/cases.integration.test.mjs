@@ -96,8 +96,9 @@ test("proteção dos cases no build de produção", { timeout: 120000 }, async t
     const home = await get(base);
     const html = await home.text();
     assert.equal(home.status, 200);
-    assert.match(html, /demo-aurora/);
-    assert.match(html, /demo-orbita/);
+    assert.match(html, /src="\/images\/home\/contratacao-audiovisual\.png"/);
+    assert.match(html, /src="\/images\/home\/educacao-corporativa\.png"/);
+    assert.doesNotMatch(html, /href="\/cases\/(contratacao-audiovisual|educacao-corporativa)"/);
     assert.doesNotMatch(html, markers);
     const response = await get(`${base}/cases/demo-publico`);
     assert.equal(response.status, 200);

@@ -10,6 +10,11 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-home-white: #f0efe8;
+  --color-home-brown: #3a230a;
+  --color-home-brown-lighter: #6d563d;
+  --color-home-orange: #d56706;
+  --color-home-border: #d3d1c1;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,4 +28,21 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.portfolio-home {
+  --home-gutter: 20px;
+}
+
+.portfolio-home :focus-visible {
+  outline: 2px solid var(--color-home-orange);
+  outline-offset: 5px;
+}
+
+@media (min-width: 640px) {
+  .portfolio-home { --home-gutter: 32px; }
+}
+
+@media (min-width: 768px) {
+  .portfolio-home { --home-gutter: clamp(40px, 8.333333vw, 120px); }
 }
