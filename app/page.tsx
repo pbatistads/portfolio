@@ -19,7 +19,7 @@ export default function Home() {
       <main id="conteudo">
         <HomeIntro />
         <section id="work" aria-label="Trabalhos selecionados" className="scroll-mt-8 px-[var(--home-gutter)] py-12 md:py-16 xl:py-20">
-          <div className="mx-auto grid max-w-[1200px] grid-cols-1 items-start gap-12 md:grid-cols-2 md:gap-8 xl:gap-10">
+          <div className="mx-auto grid max-w-[1200px] grid-cols-1 items-start gap-12 md:gap-16 xl:gap-20">
             {featuredProjects.map((project, index) => <ProjectCard key={project.slug} project={project} preload={index === 0} />)}
           </div>
         </section>

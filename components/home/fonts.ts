@@ -7,7 +7,7 @@ export const homeTextFont = Gabarito({
 
 export const homeTitleFont = Libre_Baskerville({
   subsets: ["latin"],
-  weight: "400",
+  weight: ["400", "500"],
   style: ["normal", "italic"],
   display: "swap",
 });
