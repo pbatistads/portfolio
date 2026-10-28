@@ -23,7 +23,9 @@ async function startApp(t, env) {
   const port = await freePort();
   const base = `http://127.0.0.1:${port}`;
   const child = spawn(process.execPath, ["node_modules/next/dist/bin/next", "start", "--hostname", "127.0.0.1", "--port", String(port)], {
-    env: { ...process.env, ...env, NODE_ENV: "production", CASE_ALLOWED_ORIGIN: base },
+    // Use only the explicit test credentials; local dotenv expansion can corrupt
+    // scrypt hashes supplied through the environment when .env.local also exists.
+    env: { ...process.env, ...env, __NEXT_PROCESSED_ENV: "true", NODE_ENV: "production", CASE_ALLOWED_ORIGIN: base },
     stdio: ["ignore", "pipe", "pipe"], windowsHide: true,
   });
   t.after(() => new Promise(resolve => {
@@ -78,7 +80,7 @@ test("proteção dos cases no build de produção", { timeout: 120000 }, async t
   await new Promise(resolve => redis.listen(0, "127.0.0.1", resolve));
   t.after(() => new Promise(resolve => redis.close(resolve)));
   const env = {
-    CASE_SESSION_SECRET: secret, CASE_DEMO_AURORA_HASH: hashA, CASE_DEMO_ORBITA_HASH: hashB,
+    CASE_SESSION_SECRET: secret, CASE_DEMO_AURORA_HASH: hashA, CASE_DEMO_ORBITA_HASH: hashB, CASE_BLUEDESK_HASH: hashA,
     UPSTASH_REDIS_REST_URL: `http://127.0.0.1:${redis.address().port}`,
     UPSTASH_REDIS_REST_TOKEN: redisToken, CASE_RATE_LIMIT_NAMESPACE: "integration",
   };
@@ -98,7 +100,8 @@ test("proteção dos cases no build de produção", { timeout: 120000 }, async t
     assert.equal(home.status, 200);
     assert.match(html, /src="\/images\/home\/contratacao-audiovisual\.png"/);
     assert.match(html, /src="\/images\/home\/educacao-corporativa\.png"/);
-    assert.doesNotMatch(html, /href="\/cases\/(contratacao-audiovisual|educacao-corporativa)"/);
+    assert.match(html, /href="\/cases\/contratacao-audiovisual"/);
+    assert.doesNotMatch(html, /href="\/cases\/educacao-corporativa"/);
     assert.doesNotMatch(html, markers);
     const response = await get(`${base}/cases/demo-publico`);
     assert.equal(response.status, 200);
@@ -122,6 +125,44 @@ test("proteção dos cases no build de produção", { timeout: 120000 }, async t
         }
       }
     }
+  });
+
+  await t.test("Bluedesk: conteúdo, imagens e vídeos exigem autorização por case", async () => {
+    const slug = "contratacao-audiovisual";
+    const marker = /A Bluedesk nasceu de uma ideia|O produto ficou pronto/;
+    for (const headers of [{}, { RSC: "1" }, { RSC: "1", "Next-Router-Prefetch": "1" }]) {
+      const response = await get(`${base}/cases/${slug}?_rsc=bluedesk`, "", headers);
+      assert.doesNotMatch(await response.text(), marker);
+    }
+    const files = ["img-filmmaker-01.png", "img-filmmaker-02.png", "img-filmmaker-03.png",
+      "video-filmmaker-01.mp4", "video-filmmaker-02.mp4", "video-filmmaker-01-poster.png", "video-filmmaker-02-poster.png"];
+    for (const file of files) {
+      assert.equal((await get(`${base}/api/cases/${slug}/files/${file}`, "", { Range: "bytes=0-99" })).status, 401);
+      assert.equal((await get(`${base}/private/cases/${slug}/${file}`)).status, 404);
+    }
+    const response = await post(base, slug, passwordA);
+    assert.equal(response.status, 200);
+    const cookie = response.headers.get("set-cookie").split(";")[0];
+    const html = await (await get(`${base}/cases/${slug}`, cookie)).text();
+    assert.match(html, marker);
+    assert.match(html, /O que eu validaria antes de lançar/);
+    assert.doesNotMatch(await (await get(`${base}/cases/${slug}`)).text(), marker);
+    for (const file of files) {
+      const asset = await get(`${base}/api/cases/${slug}/files/${file}`, cookie);
+      assert.equal(asset.status, 200, file);
+      assert.match(asset.headers.get("cache-control"), /no-store/);
+      assert.ok((await asset.arrayBuffer()).byteLength > 0);
+    }
+    const videoUrl = `${base}/api/cases/${slug}/files/video-filmmaker-01.mp4`;
+    const range = await get(videoUrl, cookie, { Range: "bytes=0-99" });
+    assert.equal(range.status, 206);
+    assert.equal((await range.arrayBuffer()).byteLength, 100);
+    assert.match(range.headers.get("content-range"), /^bytes 0-99\//);
+    assert.equal((await get(videoUrl, cookie, { Range: "bytes=999999999-" })).status, 416);
+    const otherCaseCookie = `${cookieName("demo-aurora", true)}=${issueSession("demo-aurora", secret, hashA)}`;
+    assert.equal((await get(videoUrl, otherCaseCookie)).status, 401);
+    const expired = `${cookieName(slug, true)}=${issueSession(slug, secret, hashA, Math.floor(Date.now() / 1000) - SESSION_SECONDS - 1)}`;
+    assert.equal((await get(videoUrl, expired)).status, 401);
   });
 
   await t.test("imagens, arquivos e caminhos diretos não autorizados", async () => {
@@ -235,6 +276,7 @@ test("proteção dos cases no build de produção", { timeout: 120000 }, async t
     for (const file of files) {
       const body = await readFile(file, "utf8");
       assert.doesNotMatch(body, markers, file);
+      assert.doesNotMatch(body, /A Bluedesk nasceu de uma ideia|O produto ficou pronto/, file);
       assert.ok(!body.includes(hashA) && !body.includes(hashB) && !body.includes(secret), file);
     }
     // Verify fixtures are packaged for server functions without becoming client assets.

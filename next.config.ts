@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   outputFileTracingIncludes: {
     "/cases/*": ["./private/cases/demo-*/**/*"],
-    "/api/cases/*/files/*": ["./private/cases/demo-*/**/*"],
+    "/api/cases/*/files/*": ["./private/cases/**/*"],
   },
   async headers() {
     return [{

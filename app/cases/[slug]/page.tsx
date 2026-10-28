@@ -33,6 +33,7 @@ export default async function CasePage({ params }: PageProps<"/cases/[slug]">) {
   if (!result) notFound();
 
   const { project, Content } = result;
+  if (project.slug === "contratacao-audiovisual") return <Content />;
   return (
     <CaseLayout project={project}>
       <Content />

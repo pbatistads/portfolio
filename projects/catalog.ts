@@ -3,6 +3,14 @@ import type { ProjectMetadata } from "./types";
 // Public information only. Never import full case content into this module.
 export const projects: readonly ProjectMetadata[] = [
   {
+    slug: "contratacao-audiovisual",
+    title: "Bluedesk",
+    summary: "Transformando uma ideia de negócio em uma plataforma de contratação audiovisual",
+    categories: ["Projeto profissional"],
+    thumbnail: { src: "/images/home/contratacao-audiovisual.png", alt: "Telas da plataforma Bluedesk" },
+    access: "protected",
+  },
+  {
     slug: "demo-aurora", title: "Aurora — case fictício",
     summary: "Exploração demonstrativa de um painel de bem-estar.",
     categories: ["UX", "Interface"], thumbnail: { src: "/window.svg", alt: "Capa pública genérica do projeto Aurora" }, access: "protected",

@@ -20,6 +20,11 @@ export async function readProtectedCase(slug: string) {
   const entry = getPrivateCase(slug);
   const project = getProjectMetadata(slug);
   if (!entry || !project) return null;
+  if (slug === "contratacao-audiovisual") {
+    const { default: Content } = await import("./bluedesk");
+    return { project, Content };
+  }
+  if (!entry.content) return null;
   const content: CaseContent = JSON.parse(await readFile(path.join(process.cwd(), "private/cases", entry.content), "utf8"));
   if (!Array.isArray(content.sections) || !content.sections.every(section =>
     typeof section.title === "string" && typeof section.text === "string") ||

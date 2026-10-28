@@ -11,3 +11,26 @@ não use imports estáticos nem next/image com cache compartilhado para eles.
 
 Consulte o README da raiz para cadastro, hashes, variáveis, limites de tentativas
 e requisitos de deploy. Não coloque senhas ou hashes nestes diretórios.
+
+## Bluedesk
+
+O slug é `contratacao-audiovisual`, com acesso protegido. O conteúdo narrativo
+fica em `projects/server/bluedesk.tsx` (server-only), carregado apenas depois da
+autorização. As mídias permanecem neste diretório privado e são ignoradas pelo Git.
+
+Provisione `private/cases/contratacao-audiovisual/` no ambiente do servidor com:
+
+- `img-filmmaker-01.png`, `img-filmmaker-02.png`, `img-filmmaker-03.png`;
+- `video-filmmaker-01.mp4`, `video-filmmaker-02.mp4`;
+- `video-filmmaker-01-poster.png`, `video-filmmaker-02-poster.png`.
+
+Os posters são quadros estáticos das animações do Figma, utilizados para a
+preferência de movimento reduzido. Os cinco anexos mantêm seus nomes originais.
+O tracing da rota de arquivos inclui estas mídias no pacote de servidor.
+
+Configure `CASE_BLUEDESK_HASH` com um hash produzido por `npm run hash:password`
+(`npm.cmd run hash:password` no PowerShell com execução de scripts desativada).
+Use a saída escapada no arquivo `.env.local`; no painel de hospedagem, gere com
+`npm run hash:password -- --raw`. Preserve `CASE_SESSION_SECRET` e as demais
+configurações existentes de origem e rate limiter. Sem o hash, o case permanece
+fechado. Nenhuma senha definitiva foi criada por esta implementação.
