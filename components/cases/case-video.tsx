@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-export function CaseVideo({ filename, label, className }: { filename: string; label: string; className?: string }) {
+export function CaseVideo({ filename, label, className, slug = "contratacao-audiovisual" }: { filename: string; label: string; className?: string; slug?: string }) {
   const ref = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -25,8 +25,8 @@ export function CaseVideo({ filename, label, className }: { filename: string; la
 
   return (
     <video ref={ref} className={className} aria-label={label} loop muted playsInline preload="metadata"
-      poster={`/api/cases/contratacao-audiovisual/files/${filename.replace(".mp4", "-poster.png")}`}>
-      <source src={`/api/cases/contratacao-audiovisual/files/${encodeURIComponent(filename)}`} type="video/mp4" />
+      poster={`/api/cases/${encodeURIComponent(slug)}/files/${filename.replace(".mp4", "-poster.png")}`}>
+      <source src={`/api/cases/${encodeURIComponent(slug)}/files/${encodeURIComponent(filename)}`} type="video/mp4" />
     </video>
   );
 }

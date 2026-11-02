@@ -80,7 +80,7 @@ test("proteção dos cases no build de produção", { timeout: 120000 }, async t
   await new Promise(resolve => redis.listen(0, "127.0.0.1", resolve));
   t.after(() => new Promise(resolve => redis.close(resolve)));
   const env = {
-    CASE_SESSION_SECRET: secret, CASE_DEMO_AURORA_HASH: hashA, CASE_DEMO_ORBITA_HASH: hashB, CASE_BLUEDESK_HASH: hashA,
+    CASE_SESSION_SECRET: secret, CASE_DEMO_AURORA_HASH: hashA, CASE_DEMO_ORBITA_HASH: hashB, CASE_BLUEDESK_HASH: hashA, CASE_YOURH_HASH: hashB,
     UPSTASH_REDIS_REST_URL: `http://127.0.0.1:${redis.address().port}`,
     UPSTASH_REDIS_REST_TOKEN: redisToken, CASE_RATE_LIMIT_NAMESPACE: "integration",
   };
@@ -101,7 +101,7 @@ test("proteção dos cases no build de produção", { timeout: 120000 }, async t
     assert.match(html, /src="\/images\/home\/contratacao-audiovisual\.png"/);
     assert.match(html, /src="\/images\/home\/educacao-corporativa\.png"/);
     assert.match(html, /href="\/cases\/contratacao-audiovisual"/);
-    assert.doesNotMatch(html, /href="\/cases\/educacao-corporativa"/);
+    assert.match(html, /href="\/cases\/educacao-corporativa"/);
     assert.doesNotMatch(html, markers);
     const response = await get(`${base}/cases/demo-publico`);
     assert.equal(response.status, 200);
@@ -109,11 +109,12 @@ test("proteção dos cases no build de produção", { timeout: 120000 }, async t
   });
 
   await t.test("HTML, RSC e prefetch bloqueados antes do desbloqueio", async () => {
-    for (const slug of ["demo-aurora", "demo-orbita"]) {
+    for (const slug of ["demo-aurora", "demo-orbita", "educacao-corporativa"]) {
       for (const headers of [{}, { RSC: "1" }, { RSC: "1", "Next-Router-Prefetch": "1" }]) {
         const response = await get(`${base}/cases/${slug}?_rsc=${randomBytes(4).toString("hex")}`, "", headers);
         const body = await response.text();
         assert.doesNotMatch(body, markers);
+        assert.doesNotMatch(body, /Como eu identifiquei os problemas|Repensando a lógica de acesso|video-educorp/);
         assert.doesNotMatch(body, /scrypt\$|CASE_SESSION_SECRET|CASE_DEMO_/);
         assert.match(response.headers.get("cache-control"), /no-store/);
         if (headers["Next-Router-Prefetch"]) {
@@ -163,6 +164,44 @@ test("proteção dos cases no build de produção", { timeout: 120000 }, async t
     assert.equal((await get(videoUrl, otherCaseCookie)).status, 401);
     const expired = `${cookieName(slug, true)}=${issueSession(slug, secret, hashA, Math.floor(Date.now() / 1000) - SESSION_SECONDS - 1)}`;
     assert.equal((await get(videoUrl, expired)).status, 401);
+  });
+
+  await t.test("YouRH: senha própria, arquivos privados e isolamento do Bluedesk", async () => {
+    const slug = "educacao-corporativa";
+    const marker = /Repensando a lógica de acesso aos treinamentos/;
+    assert.equal((await post(base, slug, passwordA)).status, 401);
+    const unlock = await post(base, slug, passwordB);
+    assert.equal(unlock.status, 200);
+    const cookie = unlock.headers.get("set-cookie").split(";")[0];
+    assert.match(await (await get(`${base}/cases/${slug}`, cookie)).text(), marker);
+    assert.doesNotMatch(await (await get(`${base}/cases/${slug}`)).text(), marker);
+    const blueCookie = `${cookieName("contratacao-audiovisual", true)}=${issueSession("contratacao-audiovisual", secret, hashA)}`;
+    const renamed = `${cookieName(slug, true)}=${blueCookie.split("=")[1]}`;
+    for (const invalid of [blueCookie, renamed]) {
+      assert.doesNotMatch(await (await get(`${base}/cases/${slug}`, invalid)).text(), marker);
+      assert.equal((await get(`${base}/api/cases/${slug}/files/video-educorp-01.mp4`, invalid)).status, 401);
+    }
+    assert.equal((await get(`${base}/api/cases/contratacao-audiovisual/files/video-filmmaker-01.mp4`, cookie)).status, 401);
+    const expired = `${cookieName(slug, true)}=${issueSession(slug, secret, hashB, Math.floor(Date.now() / 1000) - SESSION_SECONDS - 1)}`;
+    assert.equal((await get(`${base}/api/cases/${slug}/files/video-educorp-01.mp4`, expired)).status, 401);
+    const retired = ["video-educorp-05.mp4", "video-educorp-06.mp4", "video-educorp-05-poster.png", "video-educorp-06-poster.png"];
+    for (const name of retired) {
+      assert.equal((await get(`${base}/api/cases/${slug}/files/${name}`, cookie)).status, 404);
+    }
+    const names = (await readdir("private/cases/educacao-corporativa")).filter(name => !retired.includes(name));
+    assert.equal(names.filter(name => name.endsWith(".mp4")).length, 6);
+    for (const name of names) {
+      const url = `${base}/api/cases/${slug}/files/${name}`;
+      assert.equal((await get(url)).status, 401, name);
+      assert.equal((await get(`${base}/private/cases/${slug}/${name}`)).status, 404, name);
+      const response = await get(url, cookie, name.endsWith(".mp4") ? { Range: "bytes=0-99" } : {});
+      assert.equal(response.status, name.endsWith(".mp4") ? 206 : 200, name);
+      assert.match(response.headers.get("cache-control"), /no-store/);
+      assert.ok((await response.arrayBuffer()).byteLength > 0, name);
+    }
+    assert.equal((await get(`${base}/api/cases/${slug}/files/unknown.svg`, cookie)).status, 404);
+    const optimized = await get(`${base}/_next/image?url=%2Fapi%2Fcases%2F${slug}%2Ffiles%2Fvideo-educorp-01-poster.png&w=1080&q=75`, cookie);
+    assert.notEqual(optimized.status, 200);
   });
 
   await t.test("imagens, arquivos e caminhos diretos não autorizados", async () => {
@@ -277,6 +316,7 @@ test("proteção dos cases no build de produção", { timeout: 120000 }, async t
       const body = await readFile(file, "utf8");
       assert.doesNotMatch(body, markers, file);
       assert.doesNotMatch(body, /A Bluedesk nasceu de uma ideia|O produto ficou pronto/, file);
+      assert.doesNotMatch(body, /Como eu identifiquei os problemas|Repensando a lógica de acesso|video-educorp/, file);
       assert.ok(!body.includes(hashA) && !body.includes(hashB) && !body.includes(secret), file);
     }
     // Verify fixtures are packaged for server functions without becoming client assets.

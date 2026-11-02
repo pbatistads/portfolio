@@ -1,8 +1,8 @@
 ﻿# Portfólio: cases públicos e protegidos
 
 Next.js App Router, sem login, usuários, CMS ou banco de projetos. O catálogo
-público fica separado do conteúdo completo. Os dois cases protegidos são
-inteiramente fictícios e têm imagens e notas próprias fora de `public`.
+público fica separado do conteúdo completo. Bluedesk e YouRH são cases reais
+protegidos, com mídias fora de `public`. Aurora e Órbita são demonstrativos fictícios.
 
 ## Começar localmente
 
@@ -33,6 +33,28 @@ Teste em uma janela anônima: desbloqueie Aurora, atualize a página e confirme 
 reiniciar o servidor o limpa. Ele é ignorado em `next start`/produção.
 
 ## Estrutura
+
+### YouRH
+
+A rota `/cases/educacao-corporativa` está ligada ao card existente da Home.
+Configure `CASE_YOURH_HASH` com um hash de senha exclusivo gerado por
+`npm.cmd run hash:password`. No painel de hospedagem, use a saída de
+`npm.cmd run hash:password -- --raw`. Sem o hash, o case permanece fechado.
+Nenhuma senha definitiva foi criada.
+
+O YouRH reutiliza o gate, a sessão por slug, os endpoints privados, `HomeHeader`,
+`HomeFooter`, as fontes, `CaseDivider`, `CaseDecisions` e `CaseVideo`.
+O vídeo aceita um slug opcional; o valor padrão preserva o Bluedesk.
+O conteúdo específico fica em `projects/server/yourh.tsx`, com comparação
+antes/depois em `yourh-access-comparison.tsx` e estilos em `yourh.css`.
+As mídias estão em `private/cases/educacao-corporativa/`, ignoradas pelo Git;
+provisione essa pasta no servidor antes do build. Não a publique como pasta estática.
+
+Após o build, `npm run test:responsive` valida 1440, 1024, 768, 390 e 320 px,
+imagens, autoplay e movimento reduzido no Chrome headless. Use `CHROME_PATH` se o
+executável não estiver no caminho padrão do Chrome para Windows.
+Screenshots e relatório ficam em `.next/yourh-validation/`, ignorados pelo Git.
+
 
 ```text
 app/

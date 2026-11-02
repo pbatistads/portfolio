@@ -1,7 +1,7 @@
 import "server-only";
 import "./bluedesk.css";
 import { CaseDecisions } from "@/components/cases/case-decisions";
-import { HomeHeader } from "@/components/home/home-header";
+import { CaseHeader } from "@/components/cases/case-header";
 import { HomeFooter } from "@/components/home/home-footer";
 import { homeTextFont, homeTitleFont } from "@/components/home/fonts";
 import { CaseMedia, CaseDivider } from "@/components/cases/case-media";
@@ -10,7 +10,7 @@ import { CaseVideo } from "@/components/cases/case-video";
 export default function BluedeskContent() {
   return (
     <div lang="pt-BR" style={{ "--case-title-font": homeTitleFont.style.fontFamily } as React.CSSProperties} className={`${homeTextFont.className} portfolio-home bluedesk-case bg-home-white text-home-brown`} data-node-id="41:4" data-name="1.1 Case">
-      <HomeHeader workHref="/#work" />
+      <CaseHeader />
       
       <main id="conteudo" className="content-stretch flex flex-col gap-[56px] items-start justify-center case-main relative shrink-0 w-full" data-node-id="41:28">
         <div className="gap-x-[24px] gap-y-[10px] grid grid-cols-1 md:grid-cols-12 grid-rows-[repeat(1,fit-content(100%))] relative shrink-0 w-full" data-node-id="41:29" data-name="Intro">

@@ -1,10 +1,13 @@
 "use client";
 
 import { useId, useState, type FormEvent } from "react";
+import { homeTextFont, homeTitleFont } from "@/components/home/fonts";
+import { CaseHeader } from "./case-header";
+import { HomeFooter } from "@/components/home/home-footer";
+import "./protected-case-gate.css";
 
-export function ProtectedCaseGate({ slug, title }: { slug: string; title: string }) {
+export function ProtectedCaseGate({ slug }: { slug: string }) {
   const id = useId();
-  const [visible, setVisible] = useState(false);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
 
@@ -42,30 +45,29 @@ export function ProtectedCaseGate({ slug, title }: { slug: string; title: string
   }
 
   return (
-    <section className="mx-auto my-16 w-full max-w-md rounded-xl border border-zinc-300 p-6 dark:border-zinc-700" aria-labelledby={`${id}-title`}>
-      <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="mb-4">
-        <rect x="5" y="10" width="14" height="11" rx="2" />
-        <path d="M8 10V6a4 4 0 0 1 8 0v4" />
-      </svg>
-      <h1 id={`${id}-title`} className="text-2xl font-semibold">Conteúdo protegido</h1>
-      <p className="mt-3" id={`${id}-help`}>Informe a senha de {title}. O acesso será liberado somente para este case por 24 horas.</p>
-      <form onSubmit={unlock} className="mt-6 space-y-4" aria-busy={pending}>
-        <label htmlFor={`${id}-password`} className="block font-medium">Senha do case</label>
-        <div className="flex gap-2">
-          <input id={`${id}-password`} name="password" type={visible ? "text" : "password"} required maxLength={1024}
-            autoComplete="current-password" aria-describedby={`${id}-help ${id}-error`} aria-invalid={Boolean(error)}
-            className="min-w-0 flex-1 rounded border border-zinc-400 bg-transparent px-3 py-2 focus-visible:outline-2 focus-visible:outline-offset-2" />
-          <button type="button" onClick={() => setVisible(!visible)} aria-pressed={visible} aria-controls={`${id}-password`}
-            className="rounded border border-zinc-400 px-3 py-2 focus-visible:outline-2 focus-visible:outline-offset-2">
-            {visible ? "Ocultar" : "Mostrar"}
-          </button>
-        </div>
-        <p id={`${id}-error`} role="alert" className="text-sm text-red-700 dark:text-red-300">{error}</p>
-        <button type="submit" disabled={pending} className="w-full rounded bg-foreground px-4 py-3 text-background disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2">
-          {pending ? "Desbloqueando…" : "Desbloquear"}
-        </button>
-        <p role="status" className="sr-only">{pending ? "Verificando a senha." : ""}</p>
-      </form>
-    </section>
+    <div className={`${homeTextFont.className} portfolio-home case-gate bg-home-white text-home-brown`} lang="pt-BR">
+      <CaseHeader />
+      <main className="case-gate-main">
+        <section className="case-gate-card" aria-labelledby={`${id}-title`}>
+          <div className="case-gate-intro">
+            <h1 id={`${id}-title`} className={homeTitleFont.className}>Insira a senha</h1>
+            <p id={`${id}-help`}>Alguns detalhes deste projeto precisam ser preservados por questões de confidencialidade. Para conhecer o trabalho completo, insira a senha de acesso.</p>
+          </div>
+          <form onSubmit={unlock} className="case-gate-form" aria-busy={pending}>
+            <label htmlFor={`${id}-password`} className="sr-only">Senha do case</label>
+            <input id={`${id}-password`} name="password" type="password" required maxLength={1024}
+              autoComplete="current-password" placeholder="Insira a senha" aria-describedby={`${id}-help ${id}-error`}
+              aria-invalid={Boolean(error)} className="case-gate-input" />
+            <p id={`${id}-error`} role="alert" className={error ? "case-gate-error" : "hidden"}>{error}</p>
+            <button type="submit" disabled={pending} className="case-gate-submit">
+              {pending ? "Acessando…" : "Acessar"}
+            </button>
+            <p role="status" className="sr-only">{pending ? "Verificando a senha." : ""}</p>
+          </form>
+          <p className="case-gate-contact">Não possui senha? <a href="https://www.linkedin.com/in/polianabatistads/" target="_blank" rel="noreferrer" className="underline-offset-4 hover:underline">Fala comigo!</a></p>
+        </section>
+      </main>
+      <HomeFooter />
+    </div>
   );
 }

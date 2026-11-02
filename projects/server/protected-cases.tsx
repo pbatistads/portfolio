@@ -20,6 +20,10 @@ export async function readProtectedCase(slug: string) {
   const entry = getPrivateCase(slug);
   const project = getProjectMetadata(slug);
   if (!entry || !project) return null;
+  if (slug === "educacao-corporativa") {
+    const { default: Content } = await import("./yourh");
+    return { project, Content };
+  }
   if (slug === "contratacao-audiovisual") {
     const { default: Content } = await import("./bluedesk");
     return { project, Content };

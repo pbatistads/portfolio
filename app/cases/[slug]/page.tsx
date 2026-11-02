@@ -28,12 +28,12 @@ export default async function CasePage({ params }: PageProps<"/cases/[slug]">) {
   if (!metadata) notFound();
   const result = await readCase(slug);
   if (!result && metadata.access === "protected") {
-    return <ProtectedCaseGate slug={metadata.slug} title={metadata.title} />;
+    return <ProtectedCaseGate slug={metadata.slug} />;
   }
   if (!result) notFound();
 
   const { project, Content } = result;
-  if (project.slug === "contratacao-audiovisual") return <Content />;
+  if (project.slug === "contratacao-audiovisual" || project.slug === "educacao-corporativa") return <Content />;
   return (
     <CaseLayout project={project}>
       <Content />

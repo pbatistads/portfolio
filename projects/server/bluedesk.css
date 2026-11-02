@@ -7,7 +7,6 @@
   --subtle: #f8f7f4;
   overflow-x: clip;
 }
-.bluedesk-case > header { border-bottom: 1px solid var(--border); }
 .bluedesk-case .case-title { font-family: var(--case-title-font), Georgia, serif; }
 .case-main { max-width: 1440px; margin-inline: auto; padding: 80px var(--home-gutter); }
 .case-main > * { min-width: 0; }

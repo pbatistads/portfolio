@@ -12,7 +12,29 @@ não use imports estáticos nem next/image com cache compartilhado para eles.
 Consulte o README da raiz para cadastro, hashes, variáveis, limites de tentativas
 e requisitos de deploy. Não coloque senhas ou hashes nestes diretórios.
 
+## YouRH
+
+Rota: `/cases/educacao-corporativa`. Configure `CASE_YOURH_HASH` com uma senha
+exclusiva, gerando o hash com `npm.cmd run hash:password` para `.env.local`
+ou `npm.cmd run hash:password -- --raw` para o painel de hospedagem.
+Preserve a chave de sessão e as configurações existentes de origem e Redis.
+Sem o hash, o case permanece fechado.
+
+Provisione `private/cases/educacao-corporativa/` no servidor: seis arquivos
+`video-educorp-01.mp4` até `video-educorp-04.mp4`, `video-educorporativa-07.mp4`
+e `video-educorporativa-08.mp4`, seis posters correspondentes
+(mesmo nome do MP4 com o sufixo `-poster.png`) e dez SVGs
+do Figma (`imgSearch`, `imgCirclePlay`, `imgBookOpen`, `imgUsers`, `imgBook`,
+`imgBookMarked`, `imgShieldCheck`, `imgArrow1`, `imgArrow2`, `imgArrow3`).
+Os nomes dos MP4s anexados foram mantidos. Os posters são quadros estáticos
+das animações do Figma; o primeiro contém a tela interna, pois o fundo e
+o espaçamento externos são aplicados pelo layout. Os demais mantêm o quadro inteiro.
+Os arquivos são ignorados pelo Git e já estão cobertos pelo tracing do endpoint
+privado. Um deploy por Git exige provisioná-los separadamente antes do build.
+O conteúdo narrativo é `server-only` e só é carregado após autorização.
+
 ## Bluedesk
+
 
 O slug é `contratacao-audiovisual`, com acesso protegido. O conteúdo narrativo
 fica em `projects/server/bluedesk.tsx` (server-only), carregado apenas depois da

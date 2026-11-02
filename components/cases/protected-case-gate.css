@@ -1,0 +1,23 @@
+.case-gate { min-height: 100svh; display: flex; flex-direction: column; }
+.case-gate-main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 80px var(--home-gutter); }
+.case-gate-card { width: 640px; max-width: 100%; padding: 96px 48px; border: 1px solid var(--color-home-border); border-radius: 16px; background: #f8f7f4; display: flex; flex-direction: column; align-items: center; gap: 40px; text-align: center; }
+.case-gate-intro { display: grid; gap: 9px; width: 400px; max-width: 100%; }
+.case-gate-intro h1 { font-size: 48px; line-height: 68px; font-weight: 400; }
+.case-gate-intro p { font-size: 16px; line-height: 24px; }
+.case-gate-form { display: grid; gap: 16px; width: 400px; max-width: 100%; }
+.case-gate-input, .case-gate-submit { width: 100%; min-height: 64px; border-radius: 16px; padding: 20px; font-size: 16px; line-height: 24px; }
+.case-gate-input { border: 1px solid var(--color-home-border); background: transparent; text-align: center; color: var(--color-home-brown); }
+.case-gate-input::placeholder { color: #c2ae99; opacity: 1; }
+.case-gate-submit { background: var(--color-home-orange); color: #f8f7f4; cursor: pointer; }
+.case-gate-submit:disabled { opacity: .6; cursor: wait; }
+.case-gate-contact { font-size: 14px; line-height: 20px; color: #c2ae99; }
+.case-gate-contact a { color: var(--color-home-brown-lighter); font-weight: 600; }
+.case-gate-error { font-size: 14px; line-height: 20px; color: #a02d16; }
+@media (min-width: 1200px) {
+  .case-gate-card { min-height: 596px; padding: 100px 119px; }
+}
+@media (max-width: 767px) {
+  .case-gate-main { padding-block: 40px; }
+  .case-gate-card { padding: 48px 24px; gap: 32px; }
+  .case-gate-intro h1 { font-size: 32px; line-height: 46px; }
+}
