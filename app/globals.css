@@ -3,6 +3,23 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --portfolio-background: #f6f4e1;
+  --portfolio-surface: #f8f7f4;
+  --portfolio-text: #3a230a;
+  --portfolio-text-secondary: #6d563d;
+  --portfolio-text-muted: #c2ae99;
+  --portfolio-navigation-text: #97846f;
+  --portfolio-accent: #d50633;
+  --portfolio-border: #d3d1c1;
+  --portfolio-error: #a02d16;
+  --portfolio-page-width: 1120px;
+  --portfolio-reading-width: 880px;
+  --portfolio-space-sm: 16px;
+  --portfolio-space-md: 24px;
+  --portfolio-space-lg: 40px;
+  --portfolio-space-xl: 56px;
+  --portfolio-space-2xl: 80px;
+  --portfolio-radius: 16px;
 }
 
 @theme inline {
@@ -10,11 +27,13 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --color-home-white: #f0efe8;
-  --color-home-brown: #3a230a;
-  --color-home-brown-lighter: #6d563d;
-  --color-home-orange: #d56706;
-  --color-home-border: #d3d1c1;
+  --color-home-white: var(--portfolio-background);
+  --color-home-brown: var(--portfolio-text);
+  --color-home-brown-lighter: var(--portfolio-text-secondary);
+  /* Compatibility alias for existing case presentation classes. */
+  --color-home-orange: var(--portfolio-accent);
+  --color-accent: var(--portfolio-accent);
+  --color-home-border: var(--portfolio-border);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -32,11 +51,70 @@ body {
 
 .portfolio-home {
   --home-gutter: 20px;
+  color-scheme: light;
+}
+
+.portfolio-shell { position: relative; min-height: 100svh; display: flex; flex-direction: column; }
+.portfolio-shell > main { flex: 1; min-width: 0; }
+.portfolio-container { width: 100%; margin-inline: auto; min-width: 0; }
+.portfolio-container--page { max-width: var(--portfolio-page-width); }
+.portfolio-container--reading { max-width: var(--portfolio-reading-width); }
+.portfolio-skip-link { position: absolute; top: 8px; left: 8px; z-index: 20; padding: 12px 16px; background: var(--portfolio-surface); transform: translateY(-200%); }
+.portfolio-skip-link:focus { transform: translateY(0); }
+.portfolio-header { padding: 24px var(--home-gutter); color: var(--portfolio-navigation-text); font-size: 14px; line-height: 22px; }
+.portfolio-header-inner { display: flex; flex-direction: column; gap: 16px; }
+.portfolio-brand { display: flex; align-items: center; min-height: 44px; width: fit-content; }
+.portfolio-navigation ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 16px; }
+.portfolio-navigation a, .portfolio-navigation span { display: flex; align-items: center; min-height: 44px; }
+.portfolio-navigation [aria-current="page"] { color: var(--portfolio-accent); }
+.portfolio-navigation [aria-disabled="true"] { cursor: default; }
+.portfolio-navigation a:hover, .portfolio-brand:hover, .portfolio-back-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+.portfolio-footer { border-top: 1px solid var(--portfolio-border); padding: 24px var(--home-gutter); text-align: center; font-size: 12px; line-height: 20px; color: var(--portfolio-text-secondary); }
+.portfolio-back-header { padding: 24px var(--home-gutter) 0; color: var(--portfolio-navigation-text); font-size: 14px; line-height: 20px; }
+.portfolio-back-link { display: flex; align-items: center; min-height: 44px; width: fit-content; }
+
+@media (min-width: 768px) {
+  .portfolio-header-inner { flex-direction: row; justify-content: space-between; align-items: flex-start; }
+  .portfolio-navigation ul { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0 24px; }
+}
+
+@media (min-width: 1280px) {
+  .portfolio-shell > .portfolio-header { position: absolute; inset: 0 0 auto; z-index: 10; padding: 0; }
+  .portfolio-header-inner { padding: 29px 40px 0; }
+  .portfolio-navigation ul { flex-direction: column; align-items: flex-end; }
+  .portfolio-navigation a, .portfolio-navigation span { min-height: 38px; }
+  .portfolio-brand { min-height: 38px; }
+  .portfolio-back-header { padding: 28px 40px 0; }
 }
 
 .portfolio-home :focus-visible {
   outline: 2px solid var(--color-home-orange);
   outline-offset: 5px;
+}
+
+.cursor-label-tooltip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  max-width: calc(100vw - 16px);
+  pointer-events: none;
+  border-radius: 24px;
+  padding: 4px 8px;
+  background: var(--portfolio-accent);
+  color: var(--portfolio-surface);
+  font-size: 12px;
+  line-height: 18px;
+  box-shadow: 0 3px 6px rgb(58 35 10 / 20%);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .portfolio-home,
+  .portfolio-home :is(a, button, [tabindex]) {
+    cursor: url("/images/cursor.svg") 14 7, auto;
+  }
+  .portfolio-home :is(input, textarea, [contenteditable="true"]) { cursor: text; }
+  .portfolio-home button:disabled { cursor: not-allowed; }
 }
 
 @media (min-width: 640px) {

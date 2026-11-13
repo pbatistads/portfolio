@@ -1,6 +1,11 @@
-import { Gabarito, Libre_Baskerville } from "next/font/google";
+import { Gabarito, Libre_Baskerville, Outfit } from "next/font/google";
 
-export const homeTextFont = Gabarito({
+export const homeTextFont = Outfit({
+  subsets: ["latin"],
+  display: "swap",
+});
+
+export const footerFont = Gabarito({
   subsets: ["latin"],
   display: "swap",
 });

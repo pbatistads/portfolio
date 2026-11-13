@@ -1,0 +1,30 @@
+.about-main { padding: 40px var(--home-gutter) 80px; }
+.about-portrait { width: 238px; max-width: 100%; border-radius: 6px; box-shadow: 8px 8px 20px 0 rgb(151 132 111 / 15%); }
+.about-portrait-image { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: contain; }
+.about-content { display: grid; gap: 48px; margin-top: 48px; }
+.about-intro, .about-interests { min-width: 0; }
+.about-heading { position: relative; margin-bottom: 24px; }
+.about-heading h1 { font-size: clamp(28px, 3.333333vw, 48px); line-height: 1.42; font-weight: 400; }
+.about-heading h1 > span { color: var(--portfolio-accent); white-space: nowrap; }
+.about-biography { display: grid; gap: 12px; font-size: 16px; line-height: 24px; }
+.about-biography strong { font-weight: 600; }
+.about-interests h2 { font-size: 24px; line-height: 36px; font-weight: 400; }
+.about-interests ul { display: grid; gap: 8px; margin-top: 16px; }
+.about-interests li { display: flex; align-items: flex-start; gap: 8px; font-size: 16px; line-height: 24px; }
+.about-interests li img { flex: 0 0 12px; margin-top: 6px; }
+
+@media (min-width: 768px) {
+  .about-main { padding-block: 56px 100px; }
+  .about-content { margin-top: 56px; }
+  .about-heading h1 { font-size: 40px; }
+}
+
+@media (min-width: 1024px) {
+  .about-content { grid-template-columns: minmax(0, 520fr) minmax(0, 480fr); gap: clamp(48px, 8.333333vw, 120px); }
+  .about-heading h1 { font-size: clamp(32px, 3.333333vw, 48px); }
+  .about-interests { padding-top: calc(clamp(32px, 3.333333vw, 48px) * 1.42 + 24px); }
+}
+
+@media (min-width: 1280px) {
+  .about-main { padding-block: 136px 126px; }
+}
