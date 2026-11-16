@@ -1,12 +1,20 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useId, useRef, useState, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useId, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { homeTextFont } from "@/components/home/fonts";
 
-export function CursorLabel({ children, label }: { children: ReactNode; label: string }) {
+const subscribe = () => () => {};
+
+export function CursorLabel({ children, label, className = "", focusable = true }: {
+  children: ReactNode;
+  label: string;
+  className?: string;
+  focusable?: boolean;
+}) {
   const id = useId();
   const [open, setOpen] = useState(false);
+  const mounted = useSyncExternalStore(subscribe, () => true, () => false);
   const tooltip = useRef<HTMLSpanElement>(null);
   const position = useRef({ x: 0, y: 0 });
 
@@ -47,10 +55,11 @@ export function CursorLabel({ children, label }: { children: ReactNode; label: s
 
   return (
     <>
-      <span className="cursor-label-trigger" tabIndex={0} aria-describedby={open ? id : undefined}
+      <span className={`cursor-label-trigger ${className}`.trim()} tabIndex={focusable ? 0 : undefined} aria-describedby={open ? id : undefined}
         onPointerEnter={event => {
-          if (event.pointerType !== "mouse" || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+          if (!label || event.pointerType !== "mouse" || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
           position.current = { x: event.clientX, y: event.clientY };
+          placeLabel();
           setOpen(true);
         }}
         onPointerMove={event => {
@@ -60,16 +69,17 @@ export function CursorLabel({ children, label }: { children: ReactNode; label: s
         }}
         onPointerLeave={() => setOpen(false)}
         onFocus={event => {
-          if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+          if (!label || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
           const rect = event.currentTarget.getBoundingClientRect();
           position.current = { x: rect.left, y: rect.bottom };
+          placeLabel();
           setOpen(true);
         }}
         onBlur={() => setOpen(false)}>
         {children}
       </span>
-      {open && createPortal(
-        <span ref={tooltip} id={id} role="tooltip" className={`${homeTextFont.className} cursor-label-tooltip`}>{label}</span>,
+      {mounted && createPortal(
+        <span ref={tooltip} id={id} role="tooltip" aria-hidden={!open} data-open={open} className={`${homeTextFont.className} cursor-label-tooltip`}>{label}</span>,
         document.body,
       )}
     </>

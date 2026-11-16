@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getProjectMetadata } from "@/projects/catalog";
 import type { FeaturedProject } from "@/projects/featured";
 import { homeTitleFont } from "./fonts";
+import { CursorLabel } from "@/components/ui/cursor-label";
 
 export function ProjectCard({ project, preload = false }: { project: FeaturedProject; preload?: boolean }) {
   const registeredProject = getProjectMetadata(project.slug);
@@ -18,11 +19,11 @@ export function ProjectCard({ project, preload = false }: { project: FeaturedPro
           <div><dt>[ Papel ]</dt><dd>{project.role}</dd></div>
         </dl>
       </div>
-      <div className="home-project-cover">
+      <CursorLabel className="home-project-cover" label={registeredProject ? "Ver caso de estudo" : ""} focusable={false}>
         <Image src={project.cover} alt={project.alt} fill sizes="(min-width: 1440px) 760px, (min-width: 1024px) 60vw, (min-width: 768px) 88vw, 100vw"
           unoptimized preload={preload} className="home-project-image" />
-        {registeredProject && <span className="home-project-cta">Ver caso de estudo <span aria-hidden="true">↗</span></span>}
-      </div>
+        {registeredProject && <span className="home-project-cta">Ver caso de estudo</span>}
+      </CursorLabel>
     </>
   );
 

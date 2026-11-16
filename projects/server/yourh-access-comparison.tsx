@@ -11,7 +11,7 @@ export function YouRHAccessComparison() {
   return (
     <div className="yourh-comparison" data-node-id="145:60">
       <figure className="yourh-access-panel" data-node-id="145:52">
-        <figcaption className="yourh-eyebrow">[ ANTES ]</figcaption>
+        <figcaption className="yourh-eyebrow">[ Antes ]</figcaption>
         <div className="yourh-before">
           <div className="yourh-group yourh-training">Grupo de treinamento</div>
           <div className="yourh-before-arrows" aria-hidden="true">
@@ -25,7 +25,7 @@ export function YouRHAccessComparison() {
         <p>Pessoas e conteúdos no mesmo grupo</p>
       </figure>
       <figure className="yourh-access-panel" data-node-id="145:66">
-        <figcaption className="yourh-eyebrow">[ DEPOIS ]</figcaption>
+        <figcaption className="yourh-eyebrow">[ Depois ]</figcaption>
         <div className="yourh-after">
           <div className="yourh-group"><Icon name="imgBookMarked" /><strong>Grupos de treinamento</strong><span>Organizam conjuntos de conteúdos</span></div>
           <div className="yourh-after-arrow" aria-hidden="true"><img src={base + "imgArrow3.svg"} alt="" /></div>

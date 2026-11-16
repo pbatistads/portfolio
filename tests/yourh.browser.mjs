@@ -4,6 +4,8 @@ import { randomBytes } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
 import { createServer } from "node:net";
 import path from "node:path";
+import { assertCaseTypography } from "./helpers/case-typography.mjs";
+import { waitForScrollToSettle } from "./helpers/browser-motion.mjs";
 import { hashPassword } from "../projects/server/passwords.mjs";
 import { cookieName, issueSession } from "../projects/server/session-token.mjs";
 
@@ -98,6 +100,11 @@ try {
       };
     })()`);
     assert.equal(result.title, "YouRH");
+    assert.equal(await evaluate('getComputedStyle(document.documentElement).scrollBehavior'), "smooth");
+    await assertCaseTypography(evaluate, "yourh");
+    assert.equal(await evaluate('document.querySelectorAll(".case-section-index a").length'), 4);
+    assert.ok(await evaluate('[...document.querySelectorAll(".case-section-index a")].every(a => document.getElementById(a.hash.slice(1)))'));
+    if (width === 1440) assert.ok(await evaluate('Math.abs(document.querySelector(".case-intro").getBoundingClientRect().width - 880) < 0.1'));
     assert.equal(result.scrollWidth, result.clientWidth, JSON.stringify(result));
     assert.deepEqual(result.overflow, [], JSON.stringify(result));
     assert.ok(result.images.every(img => img.loaded), JSON.stringify(result.images));
@@ -108,11 +115,22 @@ try {
     assert.ok(result.videos.every(v => v.muted && v.loop && v.inline && !v.controls && v.autoplay && !v.paused && v.ready >= 2 && v.width > 0), JSON.stringify(result.videos));
     const screenshot = await call("Page.captureScreenshot", { format: "png", captureBeyondViewport: true, clip: { x: 0, y: 0, width, height: await evaluate("document.documentElement.scrollHeight"), scale: 1 } });
     await writeFile(path.join(output, `yourh-${width}.png`), Buffer.from(screenshot.data, "base64"));
+    const viewport = await call("Page.captureScreenshot", { format: "png", captureBeyondViewport: false });
+    await writeFile(path.join(output, `yourh-top-${width}.png`), Buffer.from(viewport.data, "base64"));
+    await evaluate('document.querySelector(`.case-section-index a[href="#yourh-investigacao"]`).click()');
+    await waitForScrollToSettle(evaluate);
+    assert.equal(await evaluate('document.querySelector(".case-section-index [aria-current=location]").getAttribute("href")'), "#yourh-investigacao");
+    assert.ok(await evaluate('Math.abs(document.getElementById("yourh-investigacao").getBoundingClientRect().top - 24) < 2'));
+    if (width === 1440) assert.ok(await evaluate('Math.abs(document.querySelector(".case-navigation-inner").getBoundingClientRect().top) < 1'));
+    await evaluate('document.querySelector(`.case-section-index a[href="#yourh-entrega"]`).click()');
+    await waitForScrollToSettle(evaluate);
+    assert.equal(await evaluate('document.querySelector(".case-section-index [aria-current=location]").getAttribute("href")'), "#yourh-entrega");
     report.push(result);
     console.log(`YouRH ${width}px: no overflow, images loaded, six videos playing`);
   }
   await call("Emulation.setEmulatedMedia", { features: [{ name: "prefers-reduced-motion", value: "reduce" }] });
   await delay(200);
+  assert.equal(await evaluate('getComputedStyle(document.documentElement).scrollBehavior'), "auto");
   assert.ok(await evaluate('[...document.querySelectorAll("video")].every(v => v.paused && !v.autoplay)'));
   await call("Page.navigate", { url: origin + "/cases/educacao-corporativa" });
   await delay(1200);

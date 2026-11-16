@@ -3,6 +3,7 @@ import { spawn } from "node:child_process";
 import { mkdir, writeFile } from "node:fs/promises";
 import { createServer } from "node:net";
 import path from "node:path";
+import { waitForScrollToSettle } from "./helpers/browser-motion.mjs";
 
 async function freePort() {
   const server = createServer();
@@ -110,6 +111,39 @@ try {
     console.log(`Home ${width}px: no overflow, images loaded, project layout verified`);
   }
   assert.ok(!requests.some(url => new URL(url).pathname.startsWith("/cases/")), "Cases must not prefetch before interaction");
+  await call("Emulation.setDeviceMetricsOverride", { width: 1440, height: 900, deviceScaleFactor: 1, mobile: false });
+  await call("Emulation.setTouchEmulationEnabled", { enabled: false });
+  await evaluate('document.querySelector(".home-project-cover").scrollIntoView({ behavior: "instant", block: "center" })');
+  const card = await evaluate(`(() => {
+    const copy = document.querySelector(".home-project-copy").getBoundingClientRect();
+    const cover = document.querySelector(".home-project-cover").getBoundingClientRect();
+    return { copyX: copy.left + copy.width / 2, coverX: cover.left + cover.width / 2, y: cover.top + cover.height / 2 };
+  })()`);
+  await call("Input.dispatchMouseEvent", { type: "mouseMoved", x: card.copyX, y: card.y });
+  await delay(450);
+  assert.equal(await evaluate('getComputedStyle(document.querySelector(".home-project-title")).textDecorationLine'), "none");
+  assert.equal(await evaluate('document.querySelector("[role=tooltip][data-open=true]")'), null);
+  assert.equal(await evaluate('getComputedStyle(document.querySelector(".home-project-image")).transform'), "none");
+  await call("Input.dispatchMouseEvent", { type: "mouseMoved", x: card.coverX, y: card.y });
+  await delay(450);
+  assert.equal(await evaluate('document.querySelector("[role=tooltip][data-open=true]").textContent'), "Ver caso de estudo");
+  assert.ok(await evaluate('new DOMMatrixReadOnly(getComputedStyle(document.querySelector(".home-project-image")).transform).a > 1.02'));
+  const imageLabelX = await evaluate('document.querySelector("[role=tooltip][data-open=true]").getBoundingClientRect().left');
+  await call("Input.dispatchMouseEvent", { type: "mouseMoved", x: card.coverX + 20, y: card.y });
+  await delay(180);
+  assert.ok(Math.abs(await evaluate('document.querySelector("[role=tooltip][data-open=true]").getBoundingClientRect().left') - imageLabelX - 20) < 0.2);
+  await call("Input.dispatchMouseEvent", { type: "mouseMoved", x: card.copyX, y: card.y });
+  await delay(300);
+  assert.equal(await evaluate('document.querySelector("[role=tooltip][data-open=true]")'), null);
+  console.log("Case image hover: smooth zoom, following label, no text underline");
+  await evaluate('window.scrollTo({ top: 0, behavior: "instant" })');
+  await call("Input.dispatchMouseEvent", { type: "mouseWheel", x: 400, y: 400, deltaX: 0, deltaY: 500 });
+  await delay(80);
+  const intermediateScroll = await evaluate("window.scrollY");
+  assert.ok(intermediateScroll > 0 && intermediateScroll < 500, `Wheel scrolling must ease toward its target: ${intermediateScroll}`);
+  await waitForScrollToSettle(evaluate);
+  assert.ok(Math.abs(await evaluate("window.scrollY") - 500) < 1);
+  console.log("Mouse wheel smoothing verified without changing its final distance");
   // Exercise client navigation so active links and route-specific CSS are checked together.
   for (const width of [1440, 1024, 768, 390, 320]) {
     await call("Emulation.setDeviceMetricsOverride", { width, height: 900, deviceScaleFactor: 1, mobile: width <= 390 });
@@ -149,19 +183,23 @@ try {
     const screenshot = await call("Page.captureScreenshot", { format: "png", captureBeyondViewport: true, clip: { x: 0, y: 0, width, height: await evaluate("document.documentElement.scrollHeight"), scale: 1 } });
     await writeFile(path.join(output, `about-${width}.png`), Buffer.from(screenshot.data, "base64"));
     report.push(result);
-    assert.equal(await evaluate('[...document.querySelectorAll("[role=tooltip]")].filter(el => el.checkVisibility()).length'), 0);
-    const trigger = await evaluate('(() => { const r = document.querySelector(".cursor-label-trigger").getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; })()');
+    assert.equal(await evaluate('[...document.querySelectorAll("[role=tooltip][data-open=true]")].filter(el => el.checkVisibility()).length'), 0);
+    const trigger = await evaluate('(() => { const r = document.querySelector(".about-heading .cursor-label-trigger").getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; })()');
     if (width >= 768) {
-      assert.match(await evaluate('getComputedStyle(document.querySelector(".cursor-label-trigger")).cursor'), /cursor\.svg/);
+      assert.match(await evaluate('getComputedStyle(document.querySelector(".about-heading .cursor-label-trigger")).cursor'), /cursor\.svg|none/);
       await call("Input.dispatchMouseEvent", { type: "mouseMoved", x: trigger.x, y: trigger.y });
       await delay(100);
-      assert.equal(await evaluate('document.querySelector("[role=tooltip]")?.textContent'), "Na verdade, Poliana");
-      const firstPosition = await evaluate('document.querySelector("[role=tooltip]").getBoundingClientRect().left');
+      assert.equal(await evaluate('document.querySelector("[role=tooltip][data-open=true]")?.textContent'), "Na verdade, Poliana");
+      assert.ok(await evaluate('document.documentElement.classList.contains("portfolio-cursor-active")'));
+      const firstPosition = await evaluate('document.querySelector("[role=tooltip][data-open=true]").getBoundingClientRect().left');
       await call("Input.dispatchMouseEvent", { type: "mouseMoved", x: trigger.x + 5, y: trigger.y });
-      assert.equal(await evaluate('document.querySelector("[role=tooltip]").getBoundingClientRect().left'), firstPosition + 5);
+      await delay(180);
+      assert.ok(Math.abs(await evaluate('document.querySelector("[role=tooltip][data-open=true]").getBoundingClientRect().left') - firstPosition - 5) < 0.2);
+      const cursorX = await evaluate('new DOMMatrixReadOnly(getComputedStyle(document.querySelector(".portfolio-smooth-cursor")).transform).m41 + 8');
+      assert.ok(Math.abs(cursorX - trigger.x - 5) < 0.2, "Smoothed cursor must settle at the pointer position");
       await call("Input.dispatchKeyEvent", { type: "keyDown", key: "Escape", code: "Escape", windowsVirtualKeyCode: 27 });
       await delay(50);
-      assert.equal(await evaluate('document.querySelector("[role=tooltip]")'), null);
+      assert.equal(await evaluate('document.querySelector("[role=tooltip][data-open=true]")'), null);
       await call("Input.dispatchMouseEvent", { type: "mouseMoved", x: 5, y: 5 });
       await call("Input.dispatchMouseEvent", { type: "mouseMoved", x: trigger.x, y: trigger.y });
       await delay(50);
@@ -169,16 +207,16 @@ try {
       await writeFile(path.join(output, `about-hover-${width}.png`), Buffer.from(hoverScreenshot.data, "base64"));
       await call("Input.dispatchMouseEvent", { type: "mouseMoved", x: 5, y: 5 });
       await delay(50);
-      assert.equal(await evaluate('document.querySelector("[role=tooltip]")'), null);
-      await evaluate('document.querySelector(".cursor-label-trigger").focus()');
+      assert.equal(await evaluate('document.querySelector("[role=tooltip][data-open=true]")'), null);
+      await evaluate('document.querySelector(".about-heading .cursor-label-trigger").focus()');
       await delay(50);
-      assert.equal(await evaluate('document.querySelector("[role=tooltip]")?.textContent'), "Na verdade, Poliana");
-      await evaluate('document.querySelector(".cursor-label-trigger").blur()');
+      assert.equal(await evaluate('document.querySelector("[role=tooltip][data-open=true]")?.textContent'), "Na verdade, Poliana");
+      await evaluate('document.querySelector(".about-heading .cursor-label-trigger").blur()');
     } else {
-      await evaluate('document.querySelector(".cursor-label-trigger").focus()');
+      await evaluate('document.querySelector(".about-heading .cursor-label-trigger").focus()');
       await delay(50);
-      assert.equal(await evaluate('document.querySelector("[role=tooltip]")'), null);
-      await evaluate('document.querySelector(".cursor-label-trigger").blur()');
+      assert.equal(await evaluate('document.querySelector("[role=tooltip][data-open=true]")'), null);
+      await evaluate('document.querySelector(".about-heading .cursor-label-trigger").blur()');
     }
     await evaluate('[...document.querySelectorAll(".portfolio-navigation a[href=\\"/\\"]")].find(el => el.checkVisibility()).click()');
     let homeReady = false;
@@ -197,6 +235,9 @@ try {
   await call("Input.dispatchKeyEvent", { type: "keyUp", key: "Tab", code: "Tab", windowsVirtualKeyCode: 9 });
   assert.equal(await evaluate('document.activeElement.className'), "portfolio-skip-link");
   await call("Emulation.setEmulatedMedia", { features: [{ name: "prefers-reduced-motion", value: "reduce" }] });
+  await delay(50);
+  assert.equal(await evaluate('getComputedStyle(document.documentElement).scrollBehavior'), "auto");
+  assert.ok(await evaluate('!document.documentElement.classList.contains("portfolio-cursor-active")'));
   assert.equal(await evaluate('getComputedStyle(document.querySelector(".home-project-cta")).transitionDuration'), "0s");
   await evaluate('document.querySelector(".home-project-link").click()');
   let gateReady = false;

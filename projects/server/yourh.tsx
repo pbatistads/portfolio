@@ -3,7 +3,10 @@ import "./yourh.css";
 import { CaseDivider } from "@/components/cases/case-media";
 import { CaseVideo } from "@/components/cases/case-video";
 import { CaseDecisions } from "@/components/cases/case-decisions";
-import { CaseHeader } from "@/components/cases/case-header";
+import { CaseNavigation } from "@/components/cases/case-navigation";
+import { CaseIntro } from "@/components/cases/case-intro";
+import { CaseContentRow } from "@/components/cases/case-content-row";
+import { CaseCaption } from "@/components/cases/case-caption";
 import { HomeFooter } from "@/components/home/home-footer";
 import { homeTextFont, homeTitleFont } from "@/components/home/fonts";
 import { YouRHAccessComparison } from "./yourh-access-comparison";
@@ -12,14 +15,21 @@ const imgSearch = "/api/cases/educacao-corporativa/files/imgSearch.svg";
 const imgCirclePlay = "/api/cases/educacao-corporativa/files/imgCirclePlay.svg";
 const imgBookOpen = "/api/cases/educacao-corporativa/files/imgBookOpen.svg";
 
+const sections = [
+  { id: "yourh-contexto", label: "Contexto" },
+  { id: "yourh-investigacao", label: "Investigação e diagnóstico" },
+  { id: "yourh-solucoes", label: "Soluções relevantes" },
+  { id: "yourh-entrega", label: "Entrega e aprendizados" },
+] as const;
+
 /* eslint-disable @next/next/no-img-element */
 export default function YouRHContent() {
   return <div lang="pt-BR" style={{ "--case-title-font": homeTitleFont.style.fontFamily } as React.CSSProperties} className={`portfolio-home yourh-case ${homeTextFont.className} bg-home-white text-home-brown min-h-screen`}>
-    <CaseHeader />
-    <main className="content-stretch flex flex-col gap-[56px] items-start justify-center case-main relative shrink-0 w-full" data-node-id="131:11431">
-        <div className="gap-x-[24px] gap-y-[10px] grid grid-cols-1 md:grid-cols-12 grid-rows-[repeat(1,fit-content(100%))] relative shrink-0 w-full" data-node-id="131:11432" data-name="Intro">
+    <CaseNavigation items={sections} />
+    <main id="conteudo" className="content-stretch flex flex-col gap-[56px] items-start justify-center case-main relative shrink-0 w-full" data-node-id="131:11431">
+        <CaseIntro id="yourh-contexto" nodeId="131:11432">
           <div className="md:col-span-4 content-stretch flex items-start justify-self-stretch relative self-stretch shrink-0" data-node-id="131:11433" data-name="Name">
-            <h1 className="[word-break:break-word] case-title font-normal leading-[68px] relative shrink-0 text-[48px] text-[color:var(--brown,#3a230a)] " data-node-id="131:11434">
+            <h1 id="yourh-contexto-title" className="[word-break:break-word] case-title font-normal leading-[68px] relative shrink-0 text-[48px] text-[color:var(--brown,#3a230a)] " data-node-id="131:11434">
               YouRH
             </h1>
           </div>
@@ -30,40 +40,32 @@ export default function YouRHContent() {
             </div>
             <div className="content-stretch flex gap-[56px] items-center relative shrink-0 w-full " data-node-id="131:11437" data-name="Infos">
               <div className="content-stretch flex flex-col gap-[4px] items-start justify-center relative shrink-0" data-node-id="131:11438">
-                <p className=" font-medium leading-[20px] relative shrink-0 text-[12px] text-[color:var(--brown-lighter,#6d563d)] tracking-[0.6px] uppercase" data-node-id="131:11439">
-                  [ Papel ]
-                </p>
+                <CaseCaption nodeId="131:11439" variant="metadata">[ Papel ]</CaseCaption>
                 <p className=" font-normal leading-[0] relative shrink-0 text-[16px] text-[color:var(--brown,#3a230a)]" data-node-id="131:11440">
                   <span className="leading-[24px]">Product Designe</span>
                   <span className="leading-[24px]">r</span>
                 </p>
               </div>
               <div className="content-stretch flex flex-col gap-[4px] items-start justify-center relative shrink-0" data-node-id="131:11441">
-                <p className=" font-medium leading-[20px] relative shrink-0 text-[12px] text-[color:var(--brown-lighter,#6d563d)] tracking-[0.6px] uppercase" data-node-id="131:11442">
-                  [ Duração ]
-                </p>
+                <CaseCaption nodeId="131:11442" variant="metadata">[ Duração ]</CaseCaption>
                 <p className=" font-normal leading-[24px] relative shrink-0 text-[16px] text-[color:var(--brown,#3a230a)]" data-node-id="131:11443">
                   Jan. 2026 - Jul. 2026
                 </p>
               </div>
               <div className="content-stretch flex flex-col gap-[4px] items-start justify-center relative shrink-0" data-node-id="131:11444">
-                <p className=" font-medium leading-[20px] relative shrink-0 text-[12px] text-[color:var(--brown-lighter,#6d563d)] tracking-[0.6px] uppercase" data-node-id="131:11445">
-                  [ Escopo ]
-                </p>
+                <CaseCaption nodeId="131:11445" variant="metadata">[ Escopo ]</CaseCaption>
                 <p className=" font-normal leading-[24px] relative shrink-0 text-[16px] text-[color:var(--brown,#3a230a)]" data-node-id="131:11446">
                   Definição · Protótipos · Especificações do produto
                 </p>
               </div>
             </div>
           </div>
-        </div>
+        </CaseIntro>
         <figure className="yourh-hero" data-node-id="134:11647"><CaseVideo slug="educacao-corporativa" filename="video-educorp-01.mp4" label="Visão geral da plataforma de educação corporativa" /></figure>
         <div className="content-stretch flex gap-[40px] items-start relative shrink-0 w-full" data-node-id="131:11448" data-name="Context">
           <div className="content-stretch flex flex-[1_0_0] flex-col gap-[16px] items-start min-w-px relative" data-node-id="131:11449" data-name="Text Div">
             <div className="content-stretch flex flex-col gap-[8px] items-start justify-center relative shrink-0 w-full" data-node-id="131:11450" data-name="Section Title">
-              <p className="[word-break:break-word]  font-medium leading-[22px] relative shrink-0 text-[14px] text-[color:var(--brown-lighter,#6d563d)] tracking-[0.7px] uppercase " data-node-id="131:11451">
-                [ CONTEXTO ]
-              </p>
+              <CaseCaption nodeId="131:11451" variant="section">[ Contexto ]</CaseCaption>
             </div>
             <div className="[word-break:break-word]  font-normal leading-[0] relative shrink-0 text-[16px] text-[color:var(--brown,#3a230a)] w-full" data-node-id="131:11453">
               <p className="leading-[24px] mb-[8px]">A YouRH oferece soluções digitais para gestão de pessoas, incluindo uma plataforma de educação corporativa para disponibilizar treinamentos e acompanhar o desenvolvimento dos colaboradores.</p>
@@ -73,9 +75,7 @@ export default function YouRHContent() {
           <span className="case-decision-rule" aria-hidden="true" />
           <div className="content-stretch flex flex-[1_0_0] flex-col gap-[16px] items-start min-w-px relative" data-node-id="131:11454" data-name="Text Div">
             <div className="content-stretch flex flex-col gap-[8px] items-start justify-center relative shrink-0 w-full" data-node-id="131:11455" data-name="Section Title">
-              <p className="[word-break:break-word]  font-medium leading-[22px] relative shrink-0 text-[14px] text-[color:var(--brown-lighter,#6d563d)] tracking-[0.7px] uppercase " data-node-id="131:11456">
-                [ Desafio ]
-              </p>
+              <CaseCaption nodeId="131:11456" variant="section">[ Desafio ]</CaseCaption>
             </div>
             <div className="[word-break:break-word]  font-normal leading-[0] relative shrink-0 text-[16px] text-[color:var(--brown,#3a230a)] w-full" data-node-id="131:11458">
               <p className="leading-[24px] mb-[8px]">O primeiro contato com a plataforma mostrou que os problemas iam além da aparência. Era necessário repensar fluxos, interações e estruturas já consolidadas, sem comprometer o funcionamento do produto.</p>
@@ -85,9 +85,7 @@ export default function YouRHContent() {
           <span className="case-decision-rule" aria-hidden="true" />
           <div className="content-stretch flex flex-[1_0_0] flex-col gap-[16px] items-start min-w-px relative" data-node-id="131:11595" data-name="Text Div">
             <div className="content-stretch flex flex-col gap-[8px] items-start justify-center relative shrink-0 w-full" data-node-id="131:11596" data-name="Section Title">
-              <p className="[word-break:break-word]  font-medium leading-[22px] relative shrink-0 text-[14px] text-[color:var(--brown-lighter,#6d563d)] tracking-[0.7px] uppercase " data-node-id="131:11597">
-                [ Meu papel ]
-              </p>
+              <CaseCaption nodeId="131:11597" variant="section">[ Meu papel ]</CaseCaption>
             </div>
             <div className="[word-break:break-word]  font-normal leading-[0] relative shrink-0 text-[16px] text-[color:var(--brown,#3a230a)] w-full" data-node-id="131:11599">
               <p className="leading-[24px] mb-[8px]">Atuei como a única Product Designer do projeto, responsável pelo diagnóstico de UX, benchmarking, arquitetura da informação, fluxos, protótipos de alta fidelidade e especificações funcionais.</p>
@@ -96,13 +94,11 @@ export default function YouRHContent() {
           </div>
         </div>
         <CaseDivider />
-        <div className="content-stretch flex flex-col gap-[40px] items-start relative shrink-0 w-full" data-node-id="131:11619">
+        <div id="yourh-investigacao" className="content-stretch flex flex-col gap-[40px] items-start relative shrink-0 w-full" data-node-id="131:11619">
           <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="131:11464">
-            <p className="[word-break:break-word]  font-medium leading-[22px] relative shrink-0 text-[14px] text-[color:var(--brown-lighter,#6d563d)] tracking-[0.7px] uppercase " data-node-id="131:11465">
-              [ Investigação e diagnóstico ]
-            </p>
+            <CaseCaption nodeId="131:11465" variant="section">[ Investigação e diagnóstico ]</CaseCaption>
             <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="131:11466">
-              <div className="gap-x-[24px] gap-y-[24px] grid grid-cols-1 md:grid-cols-12 grid-rows-[repeat(1,fit-content(100%))] relative shrink-0 w-full" data-node-id="131:11467" data-name="Text Div">
+              <CaseContentRow nodeId="131:11467">
                 <div className="md:col-span-4 content-stretch flex items-center justify-self-stretch relative self-start shrink-0" data-node-id="131:11468">
                   <h2 className="[word-break:break-word] flex-[1_0_0] case-title font-semibold leading-[36px] min-w-px relative text-[24px] text-[color:var(--brown,#3a230a)]" data-node-id="131:11469">
                     Como eu identifiquei os problemas antes de propor as soluções
@@ -115,7 +111,7 @@ export default function YouRHContent() {
                     <p className="leading-[24px]">Esse processo revelou problemas importantes na jornada de aprendizagem, principalmente na descoberta de treinamentos, na continuidade dos estudos e na experiência durante as aulas. Os achados se tornaram o ponto de partida para as primeiras propostas de redesign.</p>
                   </div>
                 </div>
-              </div>
+              </CaseContentRow>
             </div>
           </div>
           <CaseDecisions nodeId="131:11605" className="case-decisions bg-[var(--subtle,#f8f7f4)] content-stretch flex flex-col items-start p-[32px] relative rounded-[16px] shrink-0 w-full">
@@ -165,12 +161,10 @@ export default function YouRHContent() {
           </CaseDecisions>
         </div>
         <CaseDivider />
-        <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="131:11474">
-          <p className="[word-break:break-word]  font-medium leading-[22px] relative shrink-0 text-[14px] text-[color:var(--brown-lighter,#6d563d)] tracking-[0.7px] uppercase " data-node-id="131:11475">
-            [ Solução 1/3 ]
-          </p>
+        <div id="yourh-solucoes" className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="131:11474">
+          <CaseCaption nodeId="131:11475" variant="section">[ Solução 1/3 ]</CaseCaption>
           <div className="content-stretch flex flex-col gap-[80px] items-start relative shrink-0 w-full" data-node-id="131:11476">
-            <div className="gap-x-[24px] gap-y-[24px] grid grid-cols-1 md:grid-cols-12 grid-rows-[repeat(1,fit-content(100%))] relative shrink-0 w-full" data-node-id="131:11477" data-name="Text Div">
+            <CaseContentRow nodeId="131:11477">
               <div className="md:col-span-4 content-stretch flex items-center justify-self-stretch relative self-start shrink-0" data-node-id="131:11478">
                 <h2 className="[word-break:break-word] flex-[1_0_0] case-title font-semibold leading-[36px] min-w-px relative text-[24px] text-[color:var(--brown,#3a230a)]" data-node-id="131:11479">
                   Redesenhando a experiência de aprendizagem
@@ -182,8 +176,8 @@ export default function YouRHContent() {
                   <p className="leading-[24px]">Em vez de apenas atualizar as interfaces existentes, reorganizei essas experiências com base nos problemas identificados e nos padrões observados durante o benchmarking.</p>
                 </div>
               </div>
-            </div>
-            <div className="gap-x-[24px] gap-y-[24px] grid grid-cols-1 lg:grid-cols-12 grid-rows-[repeat(1,fit-content(100%))] relative shrink-0 w-full" data-node-id="137:7" data-name="Text Div">
+            </CaseContentRow>
+            <CaseContentRow nodeId="137:7">
               <div className="[word-break:break-word] lg:col-span-4 content-stretch flex flex-col gap-[16px] items-start justify-center justify-self-stretch relative self-stretch shrink-0 text-[color:var(--brown,#3a230a)]" data-node-id="137:10">
                 <h2 className="case-title font-semibold leading-[36px] relative shrink-0 text-[24px] w-full" data-node-id="137:12">
                   Encontrar o conteúdo certo
@@ -194,8 +188,8 @@ export default function YouRHContent() {
                 </div>
               </div>
               <figure className="yourh-video-card yourh-solution-media lg:col-span-8" data-node-id="137:8"><CaseVideo slug="educacao-corporativa" filename="video-educorp-02.mp4" label="Catálogo com categorias, filtros e pesquisa" /></figure>
-            </div>
-            <div className="yourh-continuity-row gap-x-[24px] gap-y-[24px] grid grid-cols-1 lg:grid-cols-12 grid-rows-[repeat(1,fit-content(100%))] relative shrink-0 w-full" data-node-id="235:38" data-name="Text Div">
+            </CaseContentRow>
+            <CaseContentRow nodeId="235:38" className="yourh-continuity-row">
               <figure className="yourh-video-card yourh-solution-media lg:col-span-8" data-node-id="235:42"><CaseVideo slug="educacao-corporativa" filename="video-educorp-04.mp4" label="Continuidade dos treinamentos na página inicial" /></figure>
               <div className="[word-break:break-word] lg:col-span-4 content-stretch flex flex-col gap-[16px] items-start justify-center justify-self-stretch relative self-stretch shrink-0 text-[color:var(--brown,#3a230a)]" data-node-id="235:39">
                 <h2 className="case-title font-semibold leading-[36px] relative shrink-0 text-[24px] w-full" data-node-id="235:40">
@@ -206,9 +200,9 @@ export default function YouRHContent() {
                   <p className="leading-[24px]">Para resolver isso, introduzi uma seção de continuidade na página inicial, destacando os treinamentos iniciados e permitindo que o colaborador retornasse diretamente aos estudos.</p>
                 </div>
               </div>
-            </div>
+            </CaseContentRow>
             <div className="content-stretch flex flex-col gap-[40px] items-start relative shrink-0 w-full" data-node-id="139:15" data-name="Text Div">
-              <div className="gap-x-[24px] gap-y-[24px] grid grid-cols-1 md:grid-cols-12 grid-rows-[repeat(1,fit-content(100%))] relative shrink-0 w-full" data-node-id="139:21" data-name="Text Div">
+              <CaseContentRow nodeId="139:21">
                 <div className="md:col-span-4 content-stretch flex flex-col items-start justify-center justify-self-stretch relative self-start shrink-0" data-node-id="139:22">
                   <h2 className="[word-break:break-word] case-title font-semibold leading-[36px] relative shrink-0 text-[24px] text-[color:var(--brown,#3a230a)] w-full" data-node-id="139:23">
                     Uma experiência dedicada ao aprendizado
@@ -220,18 +214,16 @@ export default function YouRHContent() {
                     <p className="leading-[24px]">Inspirada em plataformas como a Coursera, propus uma sessão de estudos dedicada, reunindo vídeo, navegação entre aulas, materiais complementares, anotações, comentários e avaliações em um único ambiente, com menos distrações.</p>
                   </div>
                 </div>
-              </div>
+              </CaseContentRow>
               <figure className="yourh-study" data-node-id="139:16"><CaseVideo slug="educacao-corporativa" filename="video-educorp-03.mp4" label="Sessão de estudos com vídeo, materiais, anotações e avaliações" /></figure>
             </div>
           </div>
         </div>
         <CaseDivider />
         <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="145:32">
-          <p className="[word-break:break-word]  font-medium leading-[22px] relative shrink-0 text-[14px] text-[color:var(--brown-lighter,#6d563d)] tracking-[0.7px] uppercase " data-node-id="145:33">
-            [ Solução 2/3 ]
-          </p>
+          <CaseCaption nodeId="145:33" variant="section">[ Solução 2/3 ]</CaseCaption>
           <div className="content-stretch flex flex-col gap-[80px] items-start relative shrink-0 w-full" data-node-id="145:34">
-            <div className="gap-x-[24px] gap-y-[24px] grid grid-cols-1 md:grid-cols-12 grid-rows-[repeat(1,fit-content(100%))] relative shrink-0 w-full" data-node-id="145:35" data-name="Text Div">
+            <CaseContentRow nodeId="145:35">
               <div className="md:col-span-4 content-stretch flex items-center justify-self-stretch relative self-start shrink-0" data-node-id="145:36">
                 <h2 className="[word-break:break-word] flex-[1_0_0] case-title font-semibold leading-[36px] min-w-px relative text-[24px] text-[color:var(--brown,#3a230a)]" data-node-id="145:37">
                   Repensando a lógica de acesso aos treinamentos
@@ -246,17 +238,15 @@ export default function YouRHContent() {
                   <p className="leading-[24px]">Após as discussões, chegamos a um acordo para seguir com a nova estrutura, mantendo a recomendação de validá-la posteriormente com usuários reais.</p>
                 </div>
               </div>
-            </div>
+            </CaseContentRow>
             <YouRHAccessComparison />
           </div>
         </div>
         <CaseDivider />
         <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="145:126">
-          <p className="[word-break:break-word]  font-medium leading-[22px] relative shrink-0 text-[14px] text-[color:var(--brown-lighter,#6d563d)] tracking-[0.7px] uppercase " data-node-id="145:127">
-            [ Solução 3/3 ]
-          </p>
+          <CaseCaption nodeId="145:127" variant="section">[ Solução 3/3 ]</CaseCaption>
           <div className="content-stretch flex flex-col gap-[80px] items-start relative shrink-0 w-full" data-node-id="145:128">
-            <div className="gap-x-[24px] gap-y-[24px] grid grid-cols-1 md:grid-cols-12 grid-rows-[repeat(1,fit-content(100%))] relative shrink-0 w-full" data-node-id="145:129" data-name="Text Div">
+            <CaseContentRow nodeId="145:129">
               <div className="md:col-span-4 content-stretch flex items-center justify-self-stretch relative self-start shrink-0" data-node-id="145:130">
                 <h2 className="[word-break:break-word] flex-[1_0_0] case-title font-semibold leading-[36px] min-w-px relative text-[24px] text-[color:var(--brown,#3a230a)]" data-node-id="145:131">
                   Equilibrando inovação e prioridades
@@ -270,7 +260,7 @@ export default function YouRHContent() {
                   <p className="leading-[24px]">Assim, conseguimos explorar possibilidades de inovação sem perder o foco nas melhorias fundamentais da plataforma.</p>
                 </div>
               </div>
-            </div>
+            </CaseContentRow>
             <div className="content-stretch flex gap-[24px] items-start relative shrink-0 w-full" data-node-id="145:134" data-name="AI">
               <figure className="yourh-video-card yourh-ai-card" data-node-id="145:135"><CaseVideo slug="educacao-corporativa" filename="video-educorporativa-08.mp4" label="Assistente de inteligência artificial para os estudos" /></figure>
               <figure className="yourh-video-card yourh-ai-card" data-node-id="145:149"><CaseVideo slug="educacao-corporativa" filename="video-educorporativa-07.mp4" label="Inteligência artificial na criação de treinamentos" /></figure>
@@ -278,12 +268,10 @@ export default function YouRHContent() {
           </div>
         </div>
         <CaseDivider />
-        <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-full" data-node-id="151:207">
-          <p className="[word-break:break-word]  font-medium leading-[22px] relative shrink-0 text-[14px] text-[color:var(--brown-lighter,#6d563d)] tracking-[0.7px] uppercase " data-node-id="151:183">
-            [ Entrega e aprendizados ]
-          </p>
+        <div id="yourh-entrega" className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-full" data-node-id="151:207">
+          <CaseCaption nodeId="151:183" variant="section">[ Entrega e aprendizados ]</CaseCaption>
           <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="151:180">
-            <div className="gap-x-[24px] gap-y-[24px] grid grid-cols-1 md:grid-cols-12 grid-rows-[repeat(1,fit-content(100%))] relative shrink-0 w-full" data-node-id="151:181" data-name="Text Div">
+            <CaseContentRow nodeId="151:181">
               <div className="md:col-span-4 content-stretch flex flex-col items-start justify-self-stretch relative self-start shrink-0" data-node-id="151:182">
                 <h2 className="[word-break:break-word] case-title font-semibold leading-[36px] relative shrink-0 text-[24px] text-[color:var(--brown,#3a230a)] w-full" data-node-id="151:184">
                   Ao final de seis meses, entreguei uma experiência redesenhada, com fluxos, protótipos de alta fidelidade e especificações funcionais
@@ -301,7 +289,7 @@ export default function YouRHContent() {
                   </p>
                 </div>
               </div>
-            </div>
+            </CaseContentRow>
           </div>
         </div>
       </main>

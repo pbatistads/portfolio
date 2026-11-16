@@ -1,61 +1,65 @@
 import "server-only";
 import "./bluedesk.css";
 import { CaseDecisions } from "@/components/cases/case-decisions";
-import { CaseHeader } from "@/components/cases/case-header";
+import { CaseNavigation } from "@/components/cases/case-navigation";
+import { CaseIntro } from "@/components/cases/case-intro";
+import { CaseContentRow } from "@/components/cases/case-content-row";
+import { CaseCaption } from "@/components/cases/case-caption";
 import { HomeFooter } from "@/components/home/home-footer";
 import { homeTextFont, homeTitleFont } from "@/components/home/fonts";
 import { CaseMedia, CaseDivider } from "@/components/cases/case-media";
 import { CaseVideo } from "@/components/cases/case-video";
 
+const sections = [
+  { id: "bluedesk-contexto", label: "Contexto" },
+  { id: "bluedesk-desafios", label: "Desafios" },
+  { id: "bluedesk-decisoes", label: "Decisões" },
+  { id: "bluedesk-solucoes", label: "Soluções" },
+  { id: "bluedesk-handoff", label: "Handoff" },
+  { id: "bluedesk-resultados", label: "Resultados" },
+] as const;
+
 export default function BluedeskContent() {
   return (
     <div lang="pt-BR" style={{ "--case-title-font": homeTitleFont.style.fontFamily } as React.CSSProperties} className={`${homeTextFont.className} portfolio-home bluedesk-case bg-home-white text-home-brown`} data-node-id="41:4" data-name="1.1 Case">
-      <CaseHeader />
+      <CaseNavigation items={sections} />
       
       <main id="conteudo" className="content-stretch flex flex-col gap-[56px] items-start justify-center case-main relative shrink-0 w-full" data-node-id="41:28">
-        <div className="gap-x-[24px] gap-y-[10px] grid grid-cols-1 md:grid-cols-12 grid-rows-[repeat(1,fit-content(100%))] relative shrink-0 w-full" data-node-id="41:29" data-name="Intro">
+        <CaseIntro id="bluedesk-contexto" nodeId="41:29">
           <div className="md:col-span-4 content-stretch flex items-start justify-self-stretch relative self-stretch shrink-0" data-node-id="85:4" data-name="Name">
-            <h1 className="[word-break:break-word] case-title font-normal leading-[68px] relative shrink-0 text-[48px] text-[color:var(--brown,#3a230a)]" data-node-id="41:30">
+            <h1 id="bluedesk-contexto-title" className="[word-break:break-word] case-title font-normal leading-[68px] relative shrink-0 text-[48px] text-[color:var(--brown,#3a230a)]" data-node-id="41:30">
               Bluedesk</h1>
           </div>
           <div className="[word-break:break-word] md:col-span-8 content-stretch flex flex-col gap-[24px] items-center justify-center justify-self-stretch relative self-start shrink-0" data-node-id="82:16" data-name="About">
             <p className="font-normal leading-[24px] relative shrink-0 text-[16px] text-[color:var(--brown-lighter,#6d563d)] w-full" data-node-id="55:481">{`A Bluedesk nasceu de uma ideia relativamente simples: tornar a contratação de filmmakers mais previsível, usando um preço fixo em vez das negociações tradicionais do mercado audiovisual. O cliente sabia quanto cobrar, como queria receber uma proposta e até como pretendia proteger pagamentos e entregas. Eu fiquei responsável por tirar esta ideia do papel e transformá-la em um produto pronto para ser desenvolvido. `}</p>
-            <div className="content-stretch flex gap-[56px] items-center relative shrink-0 w-full" data-node-id="82:17" data-name="Infos">
+            <div className="case-metadata content-stretch flex gap-[56px] items-center relative shrink-0 w-full" data-node-id="82:17" data-name="Infos">
               <div className="content-stretch flex flex-col gap-[4px] items-start justify-center relative shrink-0" data-node-id="82:18">
-                <p className="font-medium leading-[20px] relative shrink-0 text-[12px] text-[color:var(--brown-lighter,#6d563d)] tracking-[0.6px] uppercase" data-node-id="82:19">
-                  [ Papel ]
-                </p>
+                <CaseCaption nodeId="82:19" variant="metadata">Papel</CaseCaption>
                 <p className="font-normal leading-[0] relative shrink-0 text-[16px] text-[color:var(--brown,#3a230a)]" data-node-id="82:20">
                   <span className="leading-[24px]">Product Designe</span>
                   <span className="leading-[24px]">r</span>
                 </p>
               </div>
               <div className="content-stretch flex flex-col gap-[4px] items-start justify-center relative shrink-0" data-node-id="82:21">
-                <p className="font-medium leading-[20px] relative shrink-0 text-[12px] text-[color:var(--brown-lighter,#6d563d)] tracking-[0.6px] uppercase" data-node-id="82:22">
-                  [ Duração ]
-                </p>
+                <CaseCaption nodeId="82:22" variant="metadata">Duração</CaseCaption>
                 <p className="font-normal leading-[24px] relative shrink-0 text-[16px] text-[color:var(--brown,#3a230a)]" data-node-id="82:23">
                   Out. 2025 - Nov. 2025
                 </p>
               </div>
               <div className="content-stretch flex flex-col gap-[4px] items-start justify-center relative shrink-0" data-node-id="82:24">
-                <p className="font-medium leading-[20px] relative shrink-0 text-[12px] text-[color:var(--brown-lighter,#6d563d)] tracking-[0.6px] uppercase" data-node-id="82:25">
-                  [ Escopo ]
-                </p>
+                <CaseCaption nodeId="82:25" variant="metadata">Escopo</CaseCaption>
                 <p className="font-normal leading-[24px] relative shrink-0 text-[16px] text-[color:var(--brown,#3a230a)]" data-node-id="82:26">
                   Definição · Protótipos · Especificações do produto
                 </p>
               </div>
             </div>
           </div>
-        </div>
-        <CaseMedia filename="img-filmmaker-01.png" alt="Busca, perfil, detalhes do job e conversa na Bluedesk." width={3600} height={1200} />
+        </CaseIntro>
+        <CaseMedia filename="img-filmmaker-01.png" alt="Busca, perfil, detalhes do job e conversa na Bluedesk." width={3600} height={1200} variant="hero" />
         <div className="content-stretch flex flex-col gap-[40px] items-start relative shrink-0 w-full" data-node-id="91:33" data-name="Text">
-          <div className="gap-x-[24px] gap-y-[24px] grid grid-cols-1 md:grid-cols-12 grid-rows-[repeat(1,fit-content(100%))] relative shrink-0 w-full" data-node-id="55:506" data-name="Text Div">
+          <CaseContentRow nodeId="55:506">
             <div className="md:col-span-3 content-stretch flex flex-col gap-[8px] items-start justify-center justify-self-stretch relative self-start shrink-0" data-node-id="91:35" data-name="Section Title">
-              <p className="[word-break:break-word] font-medium leading-[22px] relative shrink-0 text-[14px] text-[color:var(--brown-lighter,#6d563d)] tracking-[0.7px] uppercase" data-node-id="91:37">
-                [ o modelo ]
-              </p>
+              <CaseCaption nodeId="91:37" variant="section">O Modelo</CaseCaption>
             </div>
             <div className="[word-break:break-word] md:col-span-9 font-normal justify-self-stretch leading-[0] relative self-start shrink-0 text-[16px] text-[color:var(--brown,#3a230a)]" data-node-id="55:498">
               <p className="mb-[8px]">
@@ -66,12 +70,10 @@ export default function BluedeskContent() {
               <p className="leading-[24px] mb-[8px]">A principal diferença estava no modelo de contratação. Em vez de cada profissional definir seu próprio preço ou negociar uma proposta, todos os jobs partiriam de uma diária fixa de US$120.</p>
               <p className="leading-[24px]">O contratante escolheria o profissional, definiria o briefing e os entregáveis, realizaria o pagamento e enviaria a proposta. O filmmaker poderia então aceitar ou recusar o job.</p>
             </div>
-          </div>
-          <div className="gap-x-[24px] gap-y-[24px] grid grid-cols-1 md:grid-cols-12 grid-rows-[repeat(1,fit-content(100%))] relative shrink-0 w-full" data-node-id="85:5" data-name="Text Div">
+          </CaseContentRow>
+          <CaseContentRow nodeId="85:5">
             <div className="md:col-span-3 content-stretch flex flex-col gap-[8px] items-start justify-center justify-self-stretch relative self-start shrink-0" data-node-id="91:39" data-name="Section Title">
-              <p className="[word-break:break-word] font-medium leading-[22px] relative shrink-0 text-[14px] text-[color:var(--brown-lighter,#6d563d)] tracking-[0.7px] uppercase" data-node-id="91:40">
-                [ a experiência ]
-              </p>
+              <CaseCaption nodeId="91:40" variant="section">A Experiência</CaseCaption>
             </div>
             <div className="[word-break:break-word] md:col-span-9 font-normal justify-self-stretch leading-[0] relative self-start shrink-0 text-[16px] text-[color:var(--brown,#3a230a)]" data-node-id="85:7">
               <p className="mb-[8px]">
@@ -81,15 +83,13 @@ export default function BluedeskContent() {
               <p className="leading-[24px] mb-[8px]">Para reduzir o risco dos dois lados, o pagamento seria realizado antecipadamente e mantido em escrow até a conclusão do trabalho. Durante a revisão, o contratante teria acesso ao material com marca d’água, enquanto os arquivos originais só seriam liberados após a aprovação.</p>
               <p className="font-semibold leading-[24px]">Como o preço seria o mesmo para todos, qualidade, reputação e adequação ao job precisariam assumir um papel central na escolha do filmmaker.</p>
             </div>
-          </div>
+          </CaseContentRow>
         </div>
         <CaseDivider />
-        <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="98:63">
-          <p className="[word-break:break-word] font-medium leading-[22px] relative shrink-0 text-[14px] text-[color:var(--brown-lighter,#6d563d)] tracking-[0.7px] uppercase" data-node-id="91:45">
-            [ desafios ]
-          </p>
+        <div id="bluedesk-desafios" className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="98:63">
+          <CaseCaption nodeId="91:45" variant="section">Desafios</CaseCaption>
           <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="98:68">
-            <div className="gap-x-[24px] gap-y-[24px] grid grid-cols-1 md:grid-cols-12 grid-rows-[repeat(1,fit-content(100%))] relative shrink-0 w-full" data-node-id="91:30" data-name="Text Div">
+            <CaseContentRow nodeId="91:30">
               <div className="md:col-span-4 content-stretch flex items-center justify-self-stretch relative self-start shrink-0" data-node-id="103:153">
                 <h2 className="[word-break:break-word] flex-[1_0_0] case-title font-semibold leading-[36px] min-w-px relative text-[24px] text-[color:var(--brown,#3a230a)]" data-node-id="91:46">{`O produto parecia simples, mas havia muito para definir `}</h2>
               </div>
@@ -123,16 +123,14 @@ export default function BluedeskContent() {
                   </p>
                 </div>
               </div>
-            </div>
+            </CaseContentRow>
           </div>
         </div>
         <CaseDivider />
-        <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="98:69">
-          <p className="[word-break:break-word] font-medium leading-[22px] relative shrink-0 text-[14px] text-[color:var(--brown-lighter,#6d563d)] tracking-[0.7px] uppercase" data-node-id="98:70">
-            [ antes dos protótipos ]
-          </p>
+        <div id="bluedesk-decisoes" className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="98:69">
+          <CaseCaption nodeId="98:70" variant="section">Antes dos protótipos</CaseCaption>
           <div className="content-stretch flex flex-col gap-[40px] items-start relative shrink-0 w-full" data-node-id="98:71">
-            <div className="gap-x-[24px] gap-y-[24px] grid grid-cols-1 md:grid-cols-12 grid-rows-[repeat(1,fit-content(100%))] relative shrink-0 w-full" data-node-id="98:72" data-name="Text Div">
+            <CaseContentRow nodeId="98:72">
               <div className="md:col-span-4 content-stretch flex items-center justify-self-stretch relative self-start shrink-0" data-node-id="103:154">
                 <h2 className="[word-break:break-word] flex-[1_0_0] case-title font-semibold leading-[36px] min-w-px relative text-[24px] text-[color:var(--brown,#3a230a)]" data-node-id="103:155">
                   Antes dos protótipos, eu precisava enxergar o sistema inteiro
@@ -145,11 +143,11 @@ export default function BluedeskContent() {
                   <p className="leading-[24px]">A vantagem era simples: era rápido de construir, fácil de discutir e bom para revelar lacunas cedo.</p>
                 </div>
               </div>
-            </div>
+            </CaseContentRow>
             <figure className="case-video-scroll w-full" tabIndex={0} aria-label="Fluxograma: role horizontalmente para explorar os detalhes">
               <CaseVideo filename="video-filmmaker-01.mp4" label="Fluxograma modular da plataforma Bluedesk" className="case-diagram" />
             </figure>
-            <div className="gap-x-[24px] gap-y-[24px] grid grid-cols-1 md:grid-cols-12 grid-rows-[repeat(1,fit-content(100%))] relative shrink-0 w-full" data-node-id="98:76" data-name="Text Div">
+            <CaseContentRow nodeId="98:76">
               <h2 className="[word-break:break-word] md:col-span-4 case-title font-semibold justify-self-stretch leading-[36px] relative self-start shrink-0 text-[24px] text-[color:var(--brown,#3a230a)]" data-node-id="99:113">
                 O diagrama ajudou a tomar decisões importantes
               </h2>
@@ -159,11 +157,9 @@ export default function BluedeskContent() {
                   <p className="leading-[24px]">O fluxograma não serviu apenas para registrar decisões. Ele foi a ferramenta que usamos para descobrir quais decisões ainda precisavam existir.</p>
                 </div>
               </div>
-            </div>
+            </CaseContentRow>
             <CaseDecisions className="case-decisions bg-[var(--subtle,#f8f7f4)] content-stretch flex flex-col gap-[24px] items-start p-6 lg:p-8 relative rounded-[16px] shrink-0 w-full" nodeId="99:85">
-              <p className="[word-break:break-word] font-medium leading-[20px] relative shrink-0 text-[12px] text-[color:var(--brown-lighter,#6d563d)] tracking-[0.6px] uppercase" data-node-id="99:114">
-                [ decisões ]
-              </p>
+              <CaseCaption nodeId="99:114" variant="card">Decisões</CaseCaption>
               <div className="content-stretch flex gap-[40px] items-start relative shrink-0 w-full" data-node-id="99:96">
                 <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[8px] items-start min-w-px relative" data-node-id="99:92">
                   <h3 className="case-title font-semibold leading-[30px] relative shrink-0 text-[20px] text-[color:var(--brown,#3a230a)] w-full" data-node-id="99:83">
@@ -199,14 +195,12 @@ export default function BluedeskContent() {
           </div>
         </div>
         <CaseDivider />
-        <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="103:115">
+        <div id="bluedesk-solucoes" className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="103:115">
           <div className="content-stretch flex flex-col gap-12 md:gap-20 items-start relative shrink-0 w-full" data-node-id="103:117">
-            <div className="gap-x-10 xl:gap-x-20 gap-y-[24px] grid grid-cols-1 md:grid-cols-2 grid-rows-[repeat(1,fit-content(100%))] relative shrink-0 w-full" data-node-id="103:118" data-name="Text Div">
+            <div className="case-solution-feature gap-x-10 xl:gap-x-20 gap-y-[24px] grid grid-cols-1 md:grid-cols-2 grid-rows-[repeat(1,fit-content(100%))] relative shrink-0 w-full" data-node-id="103:118" data-name="Text Div">
               <div className="case-briefing"><CaseVideo filename="video-filmmaker-02.mp4" label="Etapas do briefing de contratação" className="case-phone-video" /></div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[16px] items-start justify-center justify-self-stretch relative self-stretch shrink-0" data-node-id="103:120">
-                <p className="font-medium leading-[22px] relative shrink-0 text-[14px] text-[color:var(--brown-lighter,#6d563d)] tracking-[0.7px] uppercase" data-node-id="103:116">
-                  [ solução 1/3 ]
-                </p>
+                <CaseCaption nodeId="103:116" variant="section">[ Solução 1/3 ]</CaseCaption>
                 <h2 className="case-title font-semibold leading-[36px] min-w-full relative shrink-0 text-[24px] text-[color:var(--brown,#3a230a)] w-full" data-node-id="103:119">
                   O briefing precisava fazer mais do que coletar informações
                 </h2>
@@ -226,11 +220,9 @@ export default function BluedeskContent() {
             </div>
             <div className="content-stretch flex flex-col gap-[40px] items-start relative shrink-0 w-full" data-node-id="108:19516" data-name="Text Div">
               <div className="content-stretch flex flex-col items-start justify-center relative shrink-0 w-full" data-node-id="108:19519">
-                <div className="gap-x-[24px] gap-y-[24px] grid grid-cols-1 md:grid-cols-12 grid-rows-[repeat(1,fit-content(100%))] relative shrink-0 w-full" data-node-id="108:19523" data-name="Text Div">
+                <CaseContentRow nodeId="108:19523">
                   <div className="[word-break:break-word] md:col-span-4 content-stretch flex flex-col items-start justify-self-stretch relative self-start shrink-0" data-node-id="108:19531">
-                    <p className="font-medium leading-[22px] relative shrink-0 text-[14px] text-[color:var(--brown-lighter,#6d563d)] tracking-[0.7px] uppercase" data-node-id="108:19528">
-                      [ solução 2/3 ]
-                    </p>
+                    <CaseCaption nodeId="108:19528" variant="section">[ Solução 2/3 ]</CaseCaption>
                     <h2 className="case-title font-semibold leading-[36px] min-w-full relative shrink-0 text-[24px] text-[color:var(--brown,#3a230a)] w-full" data-node-id="108:19529">
                       Se todos custam o mesmo, como escolher quem contratar?
                     </h2>
@@ -260,17 +252,15 @@ export default function BluedeskContent() {
                       </p>
                     </div>
                   </div>
-                </div>
+                </CaseContentRow>
               </div>
-              <CaseMedia filename="img-filmmaker-02.png" alt="Listagem, perfil e ranking de filmmakers." width={2400} height={1120} />
+              <CaseMedia filename="img-filmmaker-02.png" alt="Listagem, perfil e ranking de filmmakers." width={2400} height={1120} variant="showcase" />
             </div>
             <div className="content-stretch flex flex-col gap-[40px] items-start relative shrink-0 w-full" data-node-id="116:11275" data-name="Text Div">
               <div className="content-stretch flex flex-col items-start justify-center relative shrink-0 w-full" data-node-id="116:11276">
-                <div className="gap-x-[24px] gap-y-[24px] grid grid-cols-1 md:grid-cols-12 grid-rows-[repeat(1,fit-content(100%))] relative shrink-0 w-full" data-node-id="116:11277" data-name="Text Div">
+                <CaseContentRow nodeId="116:11277">
                   <div className="[word-break:break-word] md:col-span-4 content-stretch flex flex-col items-start justify-self-stretch relative self-start shrink-0" data-node-id="116:11278">
-                    <p className="font-medium leading-[22px] relative shrink-0 text-[14px] text-[color:var(--brown-lighter,#6d563d)] tracking-[0.7px] uppercase" data-node-id="116:11279">
-                      [ solução 3/3 ]
-                    </p>
+                    <CaseCaption nodeId="116:11279" variant="section">[ Solução 3/3 ]</CaseCaption>
                     <h2 className="case-title font-semibold leading-[36px] min-w-full relative shrink-0 text-[24px] text-[color:var(--brown,#3a230a)] w-full" data-node-id="116:11280">
                       E quando alguma coisa dá errado?
                     </h2>
@@ -288,12 +278,10 @@ export default function BluedeskContent() {
                       <p className="leading-[24px]">Cada estado definia quais ações estavam disponíveis para contratante e filmmaker e o que o sistema deveria fazer quando ninguém agisse.</p>
                     </div>
                   </div>
-                </div>
+                </CaseContentRow>
               </div>
               <CaseDecisions className="case-decisions bg-[var(--subtle,#f8f7f4)] content-stretch flex flex-col gap-[24px] items-start p-6 lg:p-8 relative rounded-[16px] shrink-0 w-full" nodeId="103:128">
-                <p className="[word-break:break-word] font-medium leading-[20px] relative shrink-0 text-[12px] text-[color:var(--brown-lighter,#6d563d)] tracking-[0.6px] uppercase" data-node-id="103:129">
-                  [ decisões ]
-                </p>
+                <CaseCaption nodeId="103:129" variant="card">[ Decisões ]</CaseCaption>
                 <div className="content-stretch flex gap-[24px] items-start relative shrink-0 w-full" data-node-id="103:130">
                   <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[8px] items-start min-w-px relative" data-node-id="103:131">
                     <h3 className="case-title font-semibold leading-[30px] relative shrink-0 text-[20px] text-[color:var(--brown,#3a230a)] w-full" data-node-id="103:132">
@@ -336,12 +324,10 @@ export default function BluedeskContent() {
           </div>
         </div>
         <CaseDivider />
-        <div className="content-stretch flex flex-col gap-[40px] items-start relative shrink-0 w-full" data-node-id="127:11388">
-          <div className="gap-x-[24px] gap-y-[24px] grid grid-cols-1 md:grid-cols-12 grid-rows-[repeat(1,fit-content(100%))] relative shrink-0 w-full" data-node-id="121:11352" data-name="Text Div">
+        <div id="bluedesk-handoff" className="content-stretch flex flex-col gap-[40px] items-start relative shrink-0 w-full" data-node-id="127:11388">
+          <CaseContentRow nodeId="121:11352">
             <div className="[word-break:break-word] md:col-span-4 content-stretch flex flex-col items-start justify-self-stretch relative self-start shrink-0" data-node-id="121:11359">
-              <p className="font-medium leading-[22px] relative shrink-0 text-[14px] text-[color:var(--brown-lighter,#6d563d)] tracking-[0.7px] uppercase" data-node-id="121:11360">
-                [ hand-off ]
-              </p>
+              <CaseCaption nodeId="121:11360" variant="section">[ Handoff ]</CaseCaption>
               <h2 className="case-title font-semibold leading-[36px] min-w-full relative shrink-0 text-[24px] text-[color:var(--brown,#3a230a)] w-full" data-node-id="121:11361">
                 Quando as telas deixaram de ser suficientes
               </h2>
@@ -383,16 +369,14 @@ export default function BluedeskContent() {
                 </p>
               </div>
             </div>
-          </div>
+          </CaseContentRow>
           <CaseMedia filename="img-filmmaker-03.png" alt="Regras de negócio de revisão e prazo de entrega relacionadas aos estados do job." width={2022} height={944} complex />
         </div>
         <CaseDivider />
-        <div className="content-stretch flex flex-col gap-[40px] items-start relative shrink-0 w-full" data-node-id="127:11391">
-          <div className="gap-x-[24px] gap-y-[24px] grid grid-cols-1 md:grid-cols-12 grid-rows-[repeat(1,fit-content(100%))] relative shrink-0 w-full" data-node-id="127:11392" data-name="Text Div">
+        <div id="bluedesk-resultados" className="content-stretch flex flex-col gap-[40px] items-start relative shrink-0 w-full" data-node-id="127:11391">
+          <CaseContentRow nodeId="127:11392">
             <div className="[word-break:break-word] md:col-span-4 content-stretch flex flex-col items-start justify-self-stretch relative self-start shrink-0" data-node-id="127:11393">
-              <p className="font-medium leading-[22px] relative shrink-0 text-[14px] text-[color:var(--brown-lighter,#6d563d)] tracking-[0.7px] uppercase" data-node-id="127:11394">
-                [ Resultados ]
-              </p>
+              <CaseCaption nodeId="127:11394" variant="section">[ Resultados ]</CaseCaption>
               <h2 className="case-title font-semibold leading-[36px] min-w-full relative shrink-0 text-[24px] text-[color:var(--brown,#3a230a)] w-full" data-node-id="127:11395">
                 O produto ficou pronto. O desenvolvimento não aconteceu
               </h2>
@@ -407,8 +391,8 @@ export default function BluedeskContent() {
                 </p>
               </div>
             </div>
-          </div>
-          <div className="gap-x-[24px] gap-y-[24px] grid grid-cols-1 md:grid-cols-12 grid-rows-[repeat(1,fit-content(100%))] relative shrink-0 w-full" data-node-id="127:11415" data-name="Text Div">
+          </CaseContentRow>
+          <CaseContentRow nodeId="127:11415">
             <h2 className="[word-break:break-word] md:col-span-4 case-title font-semibold justify-self-stretch leading-[36px] relative self-start shrink-0 text-[24px] text-[color:var(--brown,#3a230a)]" data-node-id="127:11416">
               O que eu validaria antes de lançar
             </h2>
@@ -418,11 +402,9 @@ export default function BluedeskContent() {
                 <p className="leading-[24px]">Eu priorizaria três pontos:</p>
               </div>
             </div>
-          </div>
+          </CaseContentRow>
           <CaseDecisions className="case-decisions bg-[var(--subtle,#f8f7f4)] content-stretch flex flex-col gap-[24px] items-start p-6 lg:p-8 relative rounded-[16px] shrink-0 w-full" nodeId="127:11400">
-            <p className="[word-break:break-word] font-medium leading-[20px] relative shrink-0 text-[12px] text-[color:var(--brown-lighter,#6d563d)] tracking-[0.6px] uppercase" data-node-id="127:11401">
-              [ PARA O FUTURO ]
-            </p>
+            <CaseCaption nodeId="127:11401" variant="card">[ Para o futuro ]</CaseCaption>
             <div className="content-stretch flex gap-[40px] items-start relative shrink-0 w-full" data-node-id="127:11402">
               <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[8px] items-start min-w-px relative" data-node-id="127:11403">
                 <h3 className="case-title font-semibold leading-[30px] relative shrink-0 text-[20px] text-[color:var(--brown,#3a230a)] w-full" data-node-id="127:11404">
