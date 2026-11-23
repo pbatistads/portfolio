@@ -28,7 +28,7 @@ const output = path.resolve(".next/bluedesk-validation");
 await mkdir(output, { recursive: true });
 const app = spawn(process.execPath, ["node_modules/next/dist/bin/next", "start", "--hostname", "127.0.0.1", "--port", String(appPort)], {
   windowsHide: true, stdio: "ignore",
-  env: { ...process.env, __NEXT_PROCESSED_ENV: "true", NODE_ENV: "production", CASE_SESSION_SECRET: secret, CASE_BLUEDESK_HASH: hash },
+  env: { ...process.env, __NEXT_PROCESSED_ENV: "true", NODE_ENV: "production", VERCEL_ENV: "development", CASE_MEDIA_STORAGE: "local", CASE_SESSION_SECRET: secret, CASE_BLUEDESK_HASH: hash },
 });
 const chrome = spawn(process.env.CHROME_PATH || "C:/Program Files/Google/Chrome/Application/chrome.exe", [
   "--headless=new", "--disable-gpu", "--no-first-run", "--no-default-browser-check",

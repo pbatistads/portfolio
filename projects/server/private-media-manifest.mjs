@@ -1,0 +1,45 @@
+// Server and upload-script allowlist. Contains no credentials or public URLs.
+export const privateCases = {
+  "educacao-corporativa": {
+    passwordEnv: "CASE_YOURH_HASH",
+    content: null,
+    files: {
+      "video-educorp-01.mp4": { path: "educacao-corporativa/video-educorp-01.mp4", type: "video/mp4", attachment: false },
+      "video-educorp-01-poster.png": { path: "educacao-corporativa/video-educorp-01-poster.png", type: "image/png", attachment: false },
+      "video-educorp-02.mp4": { path: "educacao-corporativa/video-educorp-02.mp4", type: "video/mp4", attachment: false },
+      "video-educorp-02-poster.png": { path: "educacao-corporativa/video-educorp-02-poster.png", type: "image/png", attachment: false },
+      "video-educorp-03.mp4": { path: "educacao-corporativa/video-educorp-03.mp4", type: "video/mp4", attachment: false },
+      "video-educorp-03-poster.png": { path: "educacao-corporativa/video-educorp-03-poster.png", type: "image/png", attachment: false },
+      "video-educorp-04.mp4": { path: "educacao-corporativa/video-educorp-04.mp4", type: "video/mp4", attachment: false },
+      "video-educorp-04-poster.png": { path: "educacao-corporativa/video-educorp-04-poster.png", type: "image/png", attachment: false },
+      "video-educorporativa-07.mp4": { path: "educacao-corporativa/video-educorporativa-07.mp4", type: "video/mp4", attachment: false },
+      "video-educorporativa-07-poster.png": { path: "educacao-corporativa/video-educorporativa-07-poster.png", type: "image/png", attachment: false },
+      "video-educorporativa-08.mp4": { path: "educacao-corporativa/video-educorporativa-08.mp4", type: "video/mp4", attachment: false },
+      "video-educorporativa-08-poster.png": { path: "educacao-corporativa/video-educorporativa-08-poster.png", type: "image/png", attachment: false },
+      "imgSearch.svg": { path: "educacao-corporativa/imgSearch.svg", type: "image/svg+xml", attachment: false },
+      "imgCirclePlay.svg": { path: "educacao-corporativa/imgCirclePlay.svg", type: "image/svg+xml", attachment: false },
+      "imgBookOpen.svg": { path: "educacao-corporativa/imgBookOpen.svg", type: "image/svg+xml", attachment: false },
+      "imgUsers.svg": { path: "educacao-corporativa/imgUsers.svg", type: "image/svg+xml", attachment: false },
+      "imgBook.svg": { path: "educacao-corporativa/imgBook.svg", type: "image/svg+xml", attachment: false },
+      "imgArrow1.svg": { path: "educacao-corporativa/imgArrow1.svg", type: "image/svg+xml", attachment: false },
+      "imgArrow2.svg": { path: "educacao-corporativa/imgArrow2.svg", type: "image/svg+xml", attachment: false },
+      "imgShieldCheck.svg": { path: "educacao-corporativa/imgShieldCheck.svg", type: "image/svg+xml", attachment: false },
+      "imgBookMarked.svg": { path: "educacao-corporativa/imgBookMarked.svg", type: "image/svg+xml", attachment: false },
+      "imgArrow3.svg": { path: "educacao-corporativa/imgArrow3.svg", type: "image/svg+xml", attachment: false },
+    },
+  },
+  "contratacao-audiovisual": {
+    passwordEnv: "CASE_BLUEDESK_HASH",
+    content: null,
+    files: {
+      "video-filmmaker-01-poster.png": { path: "contratacao-audiovisual/video-filmmaker-01-poster.png", type: "image/png", attachment: false },
+      "video-filmmaker-02-poster.png": { path: "contratacao-audiovisual/video-filmmaker-02-poster.png", type: "image/png", attachment: false },
+      "img-filmmaker-01.png": { path: "contratacao-audiovisual/img-filmmaker-01.png", type: "image/png", attachment: false },
+      "img-filmmaker-02.png": { path: "contratacao-audiovisual/img-filmmaker-02.png", type: "image/png", attachment: false },
+      "img-filmmaker-03.png": { path: "contratacao-audiovisual/img-filmmaker-03.png", type: "image/png", attachment: false },
+      "video-filmmaker-01.mp4": { path: "contratacao-audiovisual/video-filmmaker-01.mp4", type: "video/mp4", attachment: false },
+      "video-filmmaker-02.mp4": { path: "contratacao-audiovisual/video-filmmaker-02.mp4", type: "video/mp4", attachment: false },
+    },
+  },
+
+};

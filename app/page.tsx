@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { pageMetadata, siteTitle, siteDescription } from "@/projects/site-metadata";
 import { PortfolioShell } from "@/components/layout/portfolio-shell";
 import { PageContainer } from "@/components/layout/page-container";
 import { HomeHeader } from "@/components/home/home-header";
@@ -8,10 +8,7 @@ import { ProjectCard } from "@/components/home/project-card";
 import { featuredProjects } from "@/projects/featured";
 import "@/components/home/home.css";
 
-export const metadata: Metadata = {
-  title: "Poli Batista | Designer de Produto",
-  description: "Engenheira de Software trabalhando como Designer de Produto. Senior Product Designer & Team Lead @ Laon.",
-};
+export const metadata = pageMetadata(siteTitle, siteDescription, "/");
 
 export default function Home() {
   return (

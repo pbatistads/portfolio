@@ -1,12 +1,12 @@
 ﻿# Conteúdo de cases protegidos
 
-Os diretórios demo-aurora e demo-orbita contêm apenas material fictício, com
-exceções explícitas no .gitignore para possibilitar testes reproduzíveis.
-Outros cases permanecem ignorados: provisione-os no build de servidor e configure
-outputFileTracingIncludes sem copiar arquivos para public ou assets estáticos.
+Os diretórios demo-aurora e demo-orbita contêm apenas material fictício histórico.
+Não estão registrados na aplicação e não são incluídos pelos traces de produção.
+Os cases reais permanecem ignorados. Use estes arquivos no desenvolvimento e no
+script de upload privado; produção usa Blob Private e exclui esta pasta dos traces.
 
-Somente projects/server/protected-cases.tsx lê estes arquivos, após validar a
-sessão do slug. Imagens e downloads são entregues pela rota privada autorizada;
+Somente a camada projects/server/media-storage.mjs lê as mídias locais, após a
+rota validar a sessão do slug. Imagens e downloads usam a rota privada autorizada;
 não use imports estáticos nem next/image com cache compartilhado para eles.
 
 Consulte o README da raiz para cadastro, hashes, variáveis, limites de tentativas
@@ -20,7 +20,7 @@ ou `npm.cmd run hash:password -- --raw` para o painel de hospedagem.
 Preserve a chave de sessão e as configurações existentes de origem e Redis.
 Sem o hash, o case permanece fechado.
 
-Provisione `private/cases/educacao-corporativa/` no servidor: seis arquivos
+Mantenha `private/cases/educacao-corporativa/` localmente: seis arquivos
 `video-educorp-01.mp4` até `video-educorp-04.mp4`, `video-educorporativa-07.mp4`
 e `video-educorporativa-08.mp4`, seis posters correspondentes
 (mesmo nome do MP4 com o sufixo `-poster.png`) e dez SVGs
@@ -29,8 +29,9 @@ do Figma (`imgSearch`, `imgCirclePlay`, `imgBookOpen`, `imgUsers`, `imgBook`,
 Os nomes dos MP4s anexados foram mantidos. Os posters são quadros estáticos
 das animações do Figma; o primeiro contém a tela interna, pois o fundo e
 o espaçamento externos são aplicados pelo layout. Os demais mantêm o quadro inteiro.
-Os arquivos são ignorados pelo Git e já estão cobertos pelo tracing do endpoint
-privado. Um deploy por Git exige provisioná-los separadamente antes do build.
+Os arquivos são ignorados pelo Git e excluídos do tracing. O script
+`npm run media:upload -- --dry-run` prepara a migração para Blob privado sem upload.
+O deploy por Git usa os objetos privados, após seu provisionamento autorizado.
 O conteúdo narrativo é `server-only` e só é carregado após autorização.
 
 ## Bluedesk
@@ -40,7 +41,7 @@ O slug é `contratacao-audiovisual`, com acesso protegido. O conteúdo narrativo
 fica em `projects/server/bluedesk.tsx` (server-only), carregado apenas depois da
 autorização. As mídias permanecem neste diretório privado e são ignoradas pelo Git.
 
-Provisione `private/cases/contratacao-audiovisual/` no ambiente do servidor com:
+Mantenha `private/cases/contratacao-audiovisual/` localmente com:
 
 - `img-filmmaker-01.png`, `img-filmmaker-02.png`, `img-filmmaker-03.png`;
 - `video-filmmaker-01.mp4`, `video-filmmaker-02.mp4`;
@@ -48,7 +49,8 @@ Provisione `private/cases/contratacao-audiovisual/` no ambiente do servidor com:
 
 Os posters são quadros estáticos das animações do Figma, utilizados para a
 preferência de movimento reduzido. Os cinco anexos mantêm seus nomes originais.
-O tracing da rota de arquivos inclui estas mídias no pacote de servidor.
+A camada local faz streaming em desenvolvimento; produção usa Blob privado,
+sem incluir estas mídias no pacote de servidor.
 
 Configure `CASE_BLUEDESK_HASH` com um hash produzido por `npm run hash:password`
 (`npm.cmd run hash:password` no PowerShell com execução de scripts desativada).

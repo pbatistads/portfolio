@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
+import { assertPortfolioFonts } from "./font-loading.mjs";
 
 export async function assertCaseTypography(evaluate, project) {
+  await assertPortfolioFonts(evaluate);
   const typography = await evaluate(`(() => ({
     uppercaseElements: document.querySelectorAll("main .uppercase").length,
     captions: [...document.querySelectorAll(".case-caption")].map(el => {

@@ -4,6 +4,7 @@ import { CaseLayout } from "@/components/cases/case-layout";
 import { ProtectedCaseGate } from "@/components/cases/protected-case-gate";
 import { getProjectMetadata } from "@/projects/catalog";
 import { readCase } from "@/projects/server/read-case";
+import { pageMetadata } from "@/projects/site-metadata";
 
 // Allow request-time access resolution without requiring a static case shell.
 export const instant = false;
@@ -16,7 +17,7 @@ export async function generateMetadata({
 
   // Only explicitly public catalog fields may enter metadata.
   if (!project || project.access === "protected") {
-    return { title: "Case protegido", robots: { index: false, follow: false, nosnippet: true, noimageindex: true, noarchive: true } };
+    return { ...pageMetadata("Case protegido | Poli Batista", "Conteúdo protegido por senha.", project ? `/cases/${project.slug}` : "/"), robots: { index: false, follow: false, nosnippet: true, noimageindex: true, noarchive: true } };
   }
 
   return { title: project.title, description: project.summary };

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/projects/site-metadata";
 import Image from "next/image";
 import { AboutIntro } from "@/components/about/about-intro";
 import { AboutInterests } from "@/components/about/about-interests";
@@ -8,10 +8,11 @@ import { PageContainer } from "@/components/layout/page-container";
 import { PortfolioShell } from "@/components/layout/portfolio-shell";
 import "@/components/about/about.css";
 
-export const metadata: Metadata = {
-  title: "Sobre mim | Poli Batista",
-  description: "Conheça a trajetória de Poliana Batista, engenheira de software e designer de produto, e seus interesses além do design.",
-};
+export const metadata = pageMetadata(
+  "Sobre mim | Poli Batista",
+  "Conheça a trajetória de Poliana Batista, engenheira de software e designer de produto, e seus interesses além do design.",
+  "/about",
+);
 
 export default function About() {
   return (

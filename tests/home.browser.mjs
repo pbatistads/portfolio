@@ -4,6 +4,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { createServer } from "node:net";
 import path from "node:path";
 import { waitForScrollToSettle } from "./helpers/browser-motion.mjs";
+import { assertPortfolioFonts } from "./helpers/font-loading.mjs";
 
 async function freePort() {
   const server = createServer();
@@ -77,6 +78,7 @@ try {
     }
     assert.ok(ready, `Home did not load at ${width}px`);
     await evaluate("document.fonts.ready");
+    await assertPortfolioFonts(evaluate);
     await evaluate('Promise.all([...document.images].map(img => { img.loading = "eager"; return img.decode().catch(() => {}); }))');
     const result = await evaluate(`(() => {
       const rect = el => { const r = el.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height }; };
@@ -157,6 +159,7 @@ try {
     }
     assert.ok(ready, `About did not load at ${width}px`);
     await evaluate("document.fonts.ready");
+    await assertPortfolioFonts(evaluate);
     await evaluate('Promise.all([...document.images].map(img => img.decode().catch(() => {})))');
     const result = await evaluate(`(() => {
       const rect = el => { const r = el.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height }; };

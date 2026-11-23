@@ -5,15 +5,11 @@ import { getProjectMetadata } from "../catalog";
 import { getCaseCredentials } from "./authorization";
 import { verifyPassword } from "./passwords.mjs";
 import { consumeUnlockAttempt } from "./rate-limit";
+import { allowedOrigins } from "./deployment-policy.mjs";
 import { cookieName, issueSession, SESSION_SECONDS } from "./session-token.mjs";
 
-export const privateHeaders = {
-  "Cache-Control": "private, no-store, max-age=0, must-revalidate",
-  "CDN-Cache-Control": "no-store",
-  "Vercel-CDN-Cache-Control": "no-store",
-  "X-Content-Type-Options": "nosniff",
-  "X-Robots-Tag": "noindex, nofollow, noarchive",
-};
+import { privateHeaders } from "./private-headers.mjs";
+export { privateHeaders };
 
 function error(message: string, status: number, extra = {}) {
   return NextResponse.json({ error: message }, { status, headers: { ...privateHeaders, ...extra } });
@@ -21,13 +17,13 @@ function error(message: string, status: number, extra = {}) {
 
 export async function unlockCase(request: Request, slug: string) {
   if (getProjectMetadata(slug)?.access !== "protected") return error("Case não encontrado.", 404);
-  const origin = process.env.CASE_ALLOWED_ORIGIN ?? (process.env.NODE_ENV !== "production" ? new URL(request.url).origin : null);
-  if (!origin) return error("Desbloqueio indisponível.", 503);
-  if (request.headers.get("origin") !== origin ||
+  const origins = allowedOrigins();
+  if (!origins.length) return error("Desbloqueio indisponível.", 503);
+  if (!origins.includes(request.headers.get("origin")) ||
       !request.headers.get("content-type")?.startsWith("application/json")) return error("Requisição não permitida.", 403);
 
-  // Consume a shared attempt before expensive scrypt work or parsing input.
-  const rate = await consumeUnlockAttempt(slug);
+  // Apply network and aggregate budgets before expensive scrypt work or parsing.
+  const rate = await consumeUnlockAttempt(slug, request.headers);
   if (rate.status === "unavailable") return error("Desbloqueio temporariamente indisponível.", 503);
   if (rate.status === "limited") return error("Muitas tentativas. Tente novamente mais tarde.", 429, { "Retry-After": String(rate.retryAfter) });
   const credentials = getCaseCredentials(slug);
